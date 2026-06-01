@@ -14,11 +14,15 @@ export const SITE_SEO = {
     'CS2 skins, precios skins CS2, comparador skins, Counter-Strike 2, Steam market, Skinport, DMarket, Global Skin Metrics',
   themeColor: '#0a0c10',
   twitterCard: 'summary_large_image',
+  ogImage: `${LEGAL.url}/og-global-skin-metrics.png`,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageAlt: `${LEGAL.siteName} — comparador de precios de skins CS2`,
 };
 
 const PUBLIC_ROUTES = {
   '/': {
-    title: 'Global Skin Metrics | Comparador de precios de skins CS2',
+    title: 'Comparador de precios de skins CS2',
     description: SITE_SEO.defaultDescription,
   },
   '/suscripciones': {
@@ -93,6 +97,44 @@ export function buildTitle(pageTitle) {
 export function buildCanonical(path) {
   const clean = path.startsWith('/') ? path : `/${path}`;
   return `${SITE_SEO.url}${clean}`;
+}
+
+/** Título legible desde slug de URL (/arma/ak-47-redline-ft). */
+export function slugToDisplayTitle(slug) {
+  if (!slug) return 'Skin CS2';
+  return slug
+    .split('-')
+    .map((part) => (part ? part.charAt(0).toUpperCase() + part.slice(1) : ''))
+    .join(' ')
+    .replace(/\bStattrak\b/i, 'StatTrak™');
+}
+
+export function buildProductJsonLd(weapon, pricing, seoDescription) {
+  const product = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: weapon.display_name,
+    description: seoDescription,
+    image: weapon.image || undefined,
+    category: weapon.category_label,
+  };
+
+  const prices = (pricing?.top_cheapest || [])
+    .map((o) => o.price_usd)
+    .filter((p) => p != null);
+
+  if (prices.length > 0) {
+    product.offers = {
+      '@type': 'AggregateOffer',
+      priceCurrency: pricing.currency || 'USD',
+      lowPrice: Math.min(...prices).toFixed(2),
+      highPrice: Math.max(...prices).toFixed(2),
+      offerCount: pricing.sources_count || prices.length,
+      availability: 'https://schema.org/InStock',
+    };
+  }
+
+  return product;
 }
 
 export function buildWebsiteJsonLd() {

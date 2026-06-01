@@ -1,8 +1,8 @@
 """
 Tareas de refresco en background (catálogo e índices de precios).
-Usa file lock para que solo un worker de Gunicorn ejecute cada job.
+En Linux/Docker usa file lock para que solo un worker de Gunicorn ejecute cada job.
+En Windows (desarrollo) el lock es no-op.
 """
-import fcntl
 import logging
 import os
 import sys
@@ -25,6 +25,8 @@ def _job_lock(name):
                 pass
 
         return _NoOpLock()
+
+    import fcntl
 
     class _FlockLock:
         def __enter__(self):

@@ -2,11 +2,6 @@
 import logging
 import os
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.interval import IntervalTrigger
 
 from services.refresh_jobs import refresh_catalog_job, refresh_price_indexes_job
 
@@ -22,13 +17,33 @@ def init_scheduler(app):
     if os.environ.get("ENABLE_SCHEDULER", "1") != "1":
         return None
 
+    try:
+        from zoneinfo import ZoneInfo
+
+        from apscheduler.schedulers.background import BackgroundScheduler
+        from apscheduler.triggers.cron import CronTrigger
+        from apscheduler.triggers.interval import IntervalTrigger
+    except ImportError as exc:
+        logger.warning(
+            "Scheduler desactivado: falta dependencia (%s). "
+            "Ejecuta: pip install -r requirements.txt",
+            exc,
+        )
+        return None
+
     tz_name = os.environ.get("SCHEDULER_TZ", "Europe/Madrid")
     catalog_hour = int(os.environ.get("CATALOG_REFRESH_HOUR", "4"))
     price_hours = int(os.environ.get("PRICE_INDEX_REFRESH_HOURS", "4"))
     startup_delay = int(os.environ.get("PRICE_INDEX_STARTUP_DELAY_MIN", "2"))
 
+    try:
+        tz = ZoneInfo(tz_name)
+    except Exception:
+        logger.warning("Zona horaria %s no disponible; usando UTC", tz_name)
+        tz_name = "UTC"
+        tz = ZoneInfo("UTC")
+
     scheduler = BackgroundScheduler(timezone=tz_name)
-    tz = ZoneInfo(tz_name)
 
     scheduler.add_job(
         refresh_catalog_job,

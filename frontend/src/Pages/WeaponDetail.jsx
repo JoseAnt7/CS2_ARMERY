@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchWeaponDetail } from '../api/client';
 import { PriceOffers } from '../components/PriceOffers';
 import { Seo } from '../components/Seo';
+import { buildProductJsonLd, slugToDisplayTitle } from '../seo/siteSeo';
 import '../styles/detail.css';
 
 function formatPrice(usd) {
@@ -20,6 +21,9 @@ export function WeaponDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fallbackName = slugToDisplayTitle(id);
+  const fallbackDescription = `Consulta el precio y las mejores ofertas de ${fallbackName} en CS2 (Steam, Skinport, DMarket y más).`;
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -31,21 +35,36 @@ export function WeaponDetail() {
 
   if (loading) {
     return (
-      <div className="detail-loading">
-        <div className="detail-hero" style={{ minHeight: 320 }} />
-        <div className="offers-panel" style={{ minHeight: 280, marginTop: 24 }} />
-      </div>
+      <>
+        <Seo
+          title={`${fallbackName} — precio CS2`}
+          description={fallbackDescription}
+          canonicalPath={`/arma/${id}`}
+        />
+        <div className="detail-loading">
+          <div className="detail-hero" style={{ minHeight: 320 }} />
+          <div className="offers-panel" style={{ minHeight: 280, marginTop: 24 }} />
+        </div>
+      </>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="error-state">
-        <p>{error || 'Arma no encontrada'}</p>
-        <Link to="/" className="back-link">
-          ← Volver al catálogo
-        </Link>
-      </div>
+      <>
+        <Seo
+          title={`${fallbackName} — precio CS2`}
+          description={fallbackDescription}
+          canonicalPath={`/arma/${id}`}
+          noindex
+        />
+        <div className="error-state">
+          <p>{error || 'Arma no encontrada'}</p>
+          <Link to="/" className="back-link">
+            ← Volver al catálogo
+          </Link>
+        </div>
+      </>
     );
   }
 
@@ -55,15 +74,7 @@ export function WeaponDetail() {
       ? ` Precio medio aproximado: ${formatPrice(pricing.average_price_usd)}.`
       : '';
   const seoDescription = `Compara precios de ${weapon.display_name} en CS2: ofertas en Steam, Skinport, DMarket y más mercados.${priceHint}`;
-
-  const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: weapon.display_name,
-    description: seoDescription,
-    image: weapon.image || undefined,
-    category: weapon.category_label,
-  };
+  const productJsonLd = buildProductJsonLd(weapon, pricing, seoDescription);
 
   return (
     <>
@@ -72,6 +83,8 @@ export function WeaponDetail() {
         description={seoDescription}
         canonicalPath={`/arma/${id}`}
         jsonLdExtra={productJsonLd}
+        imageUrl={weapon.image || undefined}
+        imageAlt={`${weapon.display_name} — precio CS2`}
       />
       <Link to="/" className="back-link">
         ← Volver al catálogo

@@ -54,6 +54,8 @@ def create_app():
     app.register_blueprint(admin_bp)
     from routes_contact import contact_bp
     app.register_blueprint(contact_bp)
+    from routes_seo import seo_bp
+    app.register_blueprint(seo_bp)
 
     _start_background_services(app)
 

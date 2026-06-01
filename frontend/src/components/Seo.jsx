@@ -51,6 +51,8 @@ export function Seo({
   canonicalPath,
   noindex = false,
   jsonLdExtra = null,
+  imageUrl = null,
+  imageAlt = null,
 }) {
   const location = useLocation();
   const path = canonicalPath ?? location.pathname;
@@ -58,13 +60,14 @@ export function Seo({
   const desc = description || SITE_SEO.defaultDescription;
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';
   const canonical = buildCanonical(path);
+  const ogImage = imageUrl || SITE_SEO.ogImage;
+  const ogImageAlt = imageAlt || SITE_SEO.ogImageAlt;
 
   useEffect(() => {
     document.title = fullTitle;
     document.documentElement.lang = SITE_SEO.language;
 
     upsertMeta('name', 'description', desc);
-    upsertMeta('name', 'keywords', SITE_SEO.defaultKeywords);
     upsertMeta('name', 'robots', robots);
     upsertMeta('name', 'author', SITE_SEO.name);
     upsertMeta('name', 'theme-color', SITE_SEO.themeColor);
@@ -75,10 +78,15 @@ export function Seo({
     upsertMeta('property', 'og:description', desc);
     upsertMeta('property', 'og:url', canonical);
     upsertMeta('property', 'og:locale', SITE_SEO.locale);
+    upsertMeta('property', 'og:image', ogImage);
+    upsertMeta('property', 'og:image:width', String(SITE_SEO.ogImageWidth));
+    upsertMeta('property', 'og:image:height', String(SITE_SEO.ogImageHeight));
+    upsertMeta('property', 'og:image:alt', ogImageAlt);
 
     upsertMeta('name', 'twitter:card', SITE_SEO.twitterCard);
     upsertMeta('name', 'twitter:title', fullTitle);
     upsertMeta('name', 'twitter:description', desc);
+    upsertMeta('name', 'twitter:image', ogImage);
 
     upsertLink('canonical', canonical);
 
@@ -90,7 +98,7 @@ export function Seo({
       const extra = document.getElementById('jsonld-page');
       if (extra) extra.remove();
     }
-  }, [fullTitle, desc, robots, canonical, jsonLdExtra]);
+  }, [fullTitle, desc, robots, canonical, jsonLdExtra, ogImage, ogImageAlt]);
 
   return null;
 }
@@ -98,6 +106,9 @@ export function Seo({
 /** SEO por defecto según la ruta actual (App shell). */
 export function SeoRouteWatcher() {
   const { pathname } = useLocation();
+  if (pathname.startsWith('/arma/')) {
+    return null;
+  }
   const config = getSeoForPath(pathname);
   return (
     <Seo

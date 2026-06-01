@@ -2,49 +2,43 @@
 
 ## Qué está implementado en el código
 
-- **`index.html`**: idioma `es`, meta description, Open Graph, Twitter Card, canonical.
-- **`SeoRouteWatcher`**: título y descripción por ruta (React).
-- **`/arma/:id`**: meta dinámica con nombre del ítem + JSON-LD `Product`.
-- **`public/robots.txt`**: permite indexar el sitio; bloquea `/admin`, `/cuenta`, `/profile`.
-- **`public/sitemap.xml`**: URLs principales (home, legales, contacto, suscripciones).
+- **`index.html`**: meta base, Open Graph, Twitter Card, `og:image` global.
+- **`Seo.jsx`**: título, descripción, canonical, OG/Twitter por ruta; `og:image` por ficha (imagen del ítem).
+- **Home**: búsqueda sincronizada con `?q=` en la URL (compatible con `SearchAction` en JSON-LD).
+- **`/arma/:id`**: SEO desde el loading (título desde slug) + JSON-LD `Product` con `AggregateOffer` cuando hay precios.
+- **`robots.txt`**: indexa el sitio; bloquea `/admin`, `/cuenta`, `/profile`.
+- **Sitemap dinámico** (`GET /sitemap.xml` en el backend): home, legales, contacto, suscripciones y **todas** las fichas `/arma/{id}` del catálogo, con `<lastmod>`.
+- Nginx y Vite proxy redirigen `/sitemap*.xml` al backend.
 
-Tras `npm run build`, `robots.txt` y `sitemap.xml` se copian a `dist/` y Nginx los sirve en la raíz.
+## Comprobar en local
 
-## Por qué aún no sale en Google
+```bash
+# Sitemap (backend en :5000)
+curl -s http://127.0.0.1:5000/sitemap.xml | head -30
 
-1. **Dominio nuevo**: Google tarda días o semanas en rastrear e indexar.
-2. **SPA (React)**: Google renderiza JavaScript, pero tarda más que HTML estático. Las fichas `/arma/...` se descubren por enlaces internos del catálogo.
-3. **Falta registrar el sitio** en [Google Search Console](https://search.google.com/search-console).
-4. **Sin enlaces externos** hacia `globalskinmetrics.com` el posicionamiento es más lento.
+# Búsqueda en URL
+# Abre http://localhost:5173/?q=ak-47
+```
 
 ## Pasos recomendados (fuera del código)
 
 1. **Google Search Console**
-   - Añadir propiedad `https://globalskinmetrics.com`
-   - Verificar dominio (DNS TXT o archivo HTML)
+   - Propiedad `https://globalskinmetrics.com`
    - Enviar sitemap: `https://globalskinmetrics.com/sitemap.xml`
-   - Solicitar indexación de la home
+   - Inspeccionar URLs de fichas importantes
 
-2. **Contenido**
-   - Mantener textos útiles en home y legales (ya hecho).
-   - El catálogo con miles de skins ayuda si cada ficha tiene enlace desde listados.
+2. **Imagen OG**: sustituir `/public/og-global-skin-metrics.png` por un banner 1200×630 si quieres mejor aspecto en redes (ahora usa el logo horizontal).
 
-3. **Rendimiento**
-   - Core Web Vitals razonables (imágenes lazy, buen hosting).
-
-4. **AdSense**
-   - Páginas legales, cookies y contenido visible alinean con requisitos de AdSense.
-   - SEO no garantiza aprobación, pero reduce motivos de rechazo por “sitio vacío o incompleto”.
+3. **Contenido y enlaces**: guías, landings por categoría, backlinks — ver auditoría SEO del proyecto.
 
 ## Mejoras futuras (opcional)
 
-- Sitemap dinámico con todas las URLs `/arma/{id}` (script en backend).
-- Pre-render (SSR) o prerender estático para fichas más indexables.
-- Imagen `og:image` dedicada (1200×630) en `/public/og-global-skin-metrics.jpg`.
-- Blog o guías (“cómo comprar skins CS2”) para más palabras clave.
+- Pre-render o HTML para bots en `/arma/*`
+- Landings `/cuchillos`, `/rifles`, etc.
+- Blog / guías informativas
+- `noindex` en páginas legales (opcional)
 
-## Comprobar meta en producción
+## Herramientas
 
-- Ver código fuente inicial: `curl -s https://globalskinmetrics.com/ | head -40`
 - Rich Results Test: https://search.google.com/test/rich-results
 - Inspección de URL en Search Console

@@ -46,6 +46,8 @@ def create_app():
     app.register_blueprint(subscriptions_bp)
     from routes_csbot import csbot_bp
     app.register_blueprint(csbot_bp)
+    from routes_whalewatch import whalewatch_bp
+    app.register_blueprint(whalewatch_bp)
 
     from routes_visits import visits_bp
     from routes_admin import admin_bp

@@ -221,3 +221,15 @@ export function runCSBotSearch(payload) {
     body: JSON.stringify(payload),
   });
 }
+
+export function fetchWhaleWatchStatus() {
+  return authRequest('/whalewatch/status');
+}
+
+export function fetchWhaleWatchAlerts(params = {}) {
+  const qs = new URLSearchParams();
+  if (params.type) qs.set('type', params.type);
+  if (params.limit) qs.set('limit', String(params.limit));
+  const query = qs.toString();
+  return authRequest(`/whalewatch/alerts${query ? `?${query}` : ''}`);
+}

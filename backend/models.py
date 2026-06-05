@@ -139,6 +139,128 @@ class PageVisit(db.Model):
         }
 
 
+class MarketSnapshot(db.Model):
+    """Histórico de precio/volumen/listados para detección WhaleWatch."""
+    __tablename__ = 'market_snapshots'
+    __table_args__ = (
+        db.Index('ix_market_snapshots_hash_time', 'market_hash_name', 'captured_at'),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    market_hash_name = db.Column(db.String(255), nullable=False, index=True)
+    captured_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    reference_usd = db.Column(db.Numeric(12, 2))
+    lowest_usd = db.Column(db.Numeric(12, 2))
+    median_usd = db.Column(db.Numeric(12, 2))
+    volume_24h = db.Column(db.Integer)
+    listing_count = db.Column(db.Integer, default=0)
+    cheapest_listing_usd = db.Column(db.Numeric(12, 2))
+
+    def to_dict(self):
+        return {
+            'market_hash_name': self.market_hash_name,
+            'captured_at': self.captured_at.isoformat() if self.captured_at else None,
+            'reference_usd': float(self.reference_usd) if self.reference_usd is not None else None,
+            'lowest_usd': float(self.lowest_usd) if self.lowest_usd is not None else None,
+            'median_usd': float(self.median_usd) if self.median_usd is not None else None,
+            'volume_24h': self.volume_24h,
+            'listing_count': self.listing_count,
+            'cheapest_listing_usd': (
+                float(self.cheapest_listing_usd)
+                if self.cheapest_listing_usd is not None
+                else None
+            ),
+        }
+
+
+class WhaleAlert(db.Model):
+    """Alerta global detectada por el radar WhaleWatch (compartida entre suscriptores)."""
+    __tablename__ = 'whale_alerts'
+    __table_args__ = (
+        db.Index('ix_whale_alerts_type_time', 'alert_type', 'detected_at'),
+        db.UniqueConstraint('market_hash_name', 'alert_type', name='uq_whale_alert_hash_type'),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    market_hash_name = db.Column(db.String(255), nullable=False, index=True)
+    alert_type = db.Column(db.String(32), nullable=False)
+    severity = db.Column(db.Integer, default=0)
+    summary = db.Column(db.String(512), nullable=False)
+    metrics_json = db.Column(db.Text, default='{}')
+    weapon_id = db.Column(db.String(64))
+    display_name = db.Column(db.String(255))
+    image = db.Column(db.String(512))
+    category_label = db.Column(db.String(80))
+    reference_usd = db.Column(db.Numeric(12, 2))
+    volume_24h = db.Column(db.Integer)
+    listing_count = db.Column(db.Integer)
+    detected_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def get_metrics(self):
+        try:
+            return json.loads(self.metrics_json or '{}')
+        except json.JSONDecodeError:
+            return {}
+
+    def to_dict(self):
+        from services.steam_market import steam_hash_listing_url
+
+        return {
+            'id': self.id,
+            'type': self.alert_type,
+            'label': self._type_label(),
+            'severity': self.severity,
+            'summary': self.summary,
+            'metrics': self.get_metrics(),
+            'market_hash_name': self.market_hash_name,
+            'weapon_id': self.weapon_id,
+            'display_name': self.display_name,
+            'image': self.image,
+            'category_label': self.category_label,
+            'reference_usd': float(self.reference_usd) if self.reference_usd is not None else None,
+            'volume_24h': self.volume_24h,
+            'listing_count': self.listing_count,
+            'steam_url': steam_hash_listing_url(self.market_hash_name),
+            'detected_at': self.detected_at.isoformat() + 'Z' if self.detected_at else None,
+            'updated_at': self.updated_at.isoformat() + 'Z' if self.updated_at else None,
+        }
+
+    def _type_label(self):
+        labels = {
+            'accumulation': 'Acumulación (compras repetidas)',
+            'mass_dump': 'Dump masivo',
+            'pump_dump': 'Pump & dump',
+        }
+        return labels.get(self.alert_type, self.alert_type)
+
+
+class WhaleWatchSettings(db.Model):
+    """Preferencias WhaleWatch por usuario."""
+    __tablename__ = 'whalewatch_settings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    settings_json = db.Column(db.Text, default='{}')
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def get_settings(self):
+        try:
+            return json.loads(self.settings_json or '{}')
+        except json.JSONDecodeError:
+            return {}
+
+    def set_settings(self, data):
+        self.settings_json = json.dumps(data)
+        self.updated_at = datetime.utcnow()
+
+    def to_dict(self):
+        return {
+            'settings': self.get_settings(),
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
 class CSBotSettings(db.Model):
     """Preferencias guardadas del bot CSBot por usuario."""
     __tablename__ = 'csbot_settings'

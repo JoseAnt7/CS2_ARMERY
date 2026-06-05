@@ -12,6 +12,12 @@ seo_bp = Blueprint("seo", __name__)
 SITE_URL = os.environ.get("SITE_URL", "https://globalskinmetrics.com").rstrip("/")
 SITEMAP_MAX_URLS = 50_000
 
+# Debe coincidir con frontend/public/ads.txt y el client en index.html
+ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "pub-7858627003457160")
+ADS_TXT_BODY = (
+    f"google.com, {ADSENSE_PUBLISHER_ID}, DIRECT, f08c47fec0942fa0\n"
+)
+
 STATIC_PATHS = [
     ("/", "daily", "1.0"),
     ("/suscripciones", "weekly", "0.7"),
@@ -78,6 +84,12 @@ def _weapon_url_entries(items, lastmod):
 
 def _static_entries():
     return "".join(_url_entry(f"{SITE_URL}{path}", cf, pr) for path, cf, pr in STATIC_PATHS)
+
+
+@seo_bp.route("/ads.txt", methods=["GET"])
+def ads_txt():
+    """Respaldo si el estático de Nginx no está disponible (AdSense)."""
+    return Response(ADS_TXT_BODY, mimetype="text/plain; charset=utf-8")
 
 
 @seo_bp.route("/sitemap.xml", methods=["GET"])

@@ -94,6 +94,25 @@ def refresh_price_indexes_job():
             logger.exception("Price indexes refresh failed")
 
 
+def whalewatch_scan_job():
+    with _job_lock("whalewatch_scan") as acquired:
+        if not acquired:
+            return
+        try:
+            from services.whale_watch import run_background_scan
+
+            logger.info("WhaleWatch background scan starting…")
+            meta = run_background_scan()
+            _save_meta({"whalewatch_last_scan": meta.get("last_scan_at")})
+            logger.info(
+                "WhaleWatch scan done: %s items, %s alerts saved",
+                meta.get("batch_size", 0),
+                meta.get("alerts_saved", 0),
+            )
+        except Exception:
+            logger.exception("WhaleWatch scan failed")
+
+
 def warm_caches_on_startup():
     """Precarga catálogo e índices al arrancar (sin bloquear el worker)."""
     if os.environ.get("ENABLE_CACHE_WARMUP", "1") != "1":

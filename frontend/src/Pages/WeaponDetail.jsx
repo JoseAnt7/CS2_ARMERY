@@ -3,7 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchWeaponDetail } from '../api/client';
 import { PriceOffers } from '../components/PriceOffers';
 import { Seo } from '../components/Seo';
+import { buildWeaponEditorialParagraphs } from '../utils/weaponEditorial';
 import '../styles/detail.css';
+import '../styles/info.css';
 
 function formatPrice(usd) {
   if (usd == null) return '—';
@@ -12,6 +14,12 @@ function formatPrice(usd) {
     currency: 'USD',
     minimumFractionDigits: 2,
   }).format(usd);
+}
+
+function slugToLabel(slug) {
+  return slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export function WeaponDetail() {
@@ -29,27 +37,44 @@ export function WeaponDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  const fallbackTitle = slugToLabel(id || 'Skin CS2');
+
   if (loading) {
     return (
-      <div className="detail-loading">
-        <div className="detail-hero" style={{ minHeight: 320 }} />
-        <div className="offers-panel" style={{ minHeight: 280, marginTop: 24 }} />
-      </div>
+      <>
+        <Seo
+          title={`${fallbackTitle} — precio CS2`}
+          description={`Consulta el precio y las mejores ofertas de ${fallbackTitle} en Steam, Skinport, DMarket y más mercados de Counter-Strike 2.`}
+          canonicalPath={`/arma/${id}`}
+        />
+        <div className="detail-loading">
+          <div className="detail-hero" style={{ minHeight: 320 }} />
+          <div className="offers-panel" style={{ minHeight: 280, marginTop: 24 }} />
+        </div>
+      </>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="error-state">
-        <p>{error || 'Arma no encontrada'}</p>
-        <Link to="/" className="back-link">
-          ← Volver al catálogo
-        </Link>
-      </div>
+      <>
+        <Seo
+          title={`${fallbackTitle} — precio CS2`}
+          description="Ficha de skin u objeto de CS2 en Global Skin Metrics."
+          canonicalPath={`/arma/${id}`}
+        />
+        <div className="error-state">
+          <p>{error || 'Objeto no encontrado en el catálogo.'}</p>
+          <Link to="/" className="back-link">
+            ← Volver al catálogo
+          </Link>
+        </div>
+      </>
     );
   }
 
   const { weapon, pricing } = data;
+  const editorialParagraphs = buildWeaponEditorialParagraphs(weapon, pricing);
   const priceHint =
     pricing?.average_price_usd != null
       ? ` Precio medio aproximado: ${formatPrice(pricing.average_price_usd)}.`
@@ -73,6 +98,19 @@ export function WeaponDetail() {
         canonicalPath={`/arma/${id}`}
         jsonLdExtra={productJsonLd}
       />
+
+      <nav className="detail-breadcrumb" aria-label="Ruta de navegación">
+        <Link to="/">Catálogo</Link>
+        <span className="detail-breadcrumb__sep" aria-hidden>
+          /
+        </span>
+        <span>{weapon.category_label}</span>
+        <span className="detail-breadcrumb__sep" aria-hidden>
+          /
+        </span>
+        <span aria-current="page">{weapon.display_name}</span>
+      </nav>
+
       <Link to="/" className="back-link">
         ← Volver al catálogo
       </Link>
@@ -95,6 +133,7 @@ export function WeaponDetail() {
               {weapon.rarity && <span className="tag">{weapon.rarity}</span>}
               {weapon.weapon && <span className="tag">{weapon.weapon}</span>}
               {weapon.stattrak && <span className="tag">StatTrak™</span>}
+              {weapon.exterior && <span className="tag">{weapon.exterior}</span>}
             </div>
 
             <div className="average-price-box">
@@ -112,6 +151,19 @@ export function WeaponDetail() {
 
         <PriceOffers pricing={pricing} />
       </div>
+
+      <section className="weapon-editorial" aria-labelledby="weapon-editorial-title">
+        <h2 id="weapon-editorial-title" className="weapon-editorial__title">
+          Sobre {weapon.display_name}
+        </h2>
+        {editorialParagraphs.map((paragraph) => (
+          <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+        ))}
+        <p className="weapon-editorial__links">
+          <Link to="/como-funciona">Cómo comparamos precios</Link>
+          <Link to="/guias/comprar-skins-cs2-seguro">Comprar con seguridad</Link>
+        </p>
+      </section>
     </>
   );
 }

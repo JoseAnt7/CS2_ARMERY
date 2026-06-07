@@ -33,6 +33,34 @@ function SiteNavLinks({ user, onClose, onLogout }) {
       >
         Catálogo
       </NavLink>
+      <NavLink
+        to="/como-funciona"
+        className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}
+        onClick={onClose}
+      >
+        Cómo funciona
+      </NavLink>
+      <NavLink
+        to="/sobre-nosotros"
+        className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}
+        onClick={onClose}
+      >
+        Sobre nosotros
+      </NavLink>
+      <NavLink
+        to="/guias"
+        className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}
+        onClick={onClose}
+      >
+        Guías
+      </NavLink>
+      <NavLink
+        to="/contacto"
+        className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}
+        onClick={onClose}
+      >
+        Contacto
+      </NavLink>
       {canSeeSubs && (
         <NavLink
           to="/suscripciones"

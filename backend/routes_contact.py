@@ -1,8 +1,13 @@
 """Formulario de contacto público."""
+import logging
+
 from flask import Blueprint, request, jsonify
 
 from extensions import db
 from models import ContactMessage
+from mail import notifications
+
+logger = logging.getLogger(__name__)
 
 contact_bp = Blueprint('contact', __name__)
 
@@ -31,5 +36,30 @@ def submit_contact():
     row = ContactMessage(name=name, email=email, topic=topic, message=message)
     db.session.add(row)
     db.session.commit()
+
+    mail_errors = []
+
+    from mail import settings as mail_settings
+
+    if mail_settings.mail_should_send():
+        if not notifications.send_contact_notification(
+            name=name, email=email, topic=topic, message=message
+        ):
+            mail_errors.append('notify')
+
+        if (
+            mail_settings.CONTACT_REPLY_ENABLED
+            and not notifications.send_contact_auto_reply(
+                name=name, email=email, topic=topic
+            )
+        ):
+            mail_errors.append('auto_reply')
+
+    if mail_errors:
+        logger.warning(
+            "Contacto #%s guardado pero falló envío de correo: %s",
+            row.id,
+            ", ".join(mail_errors),
+        )
 
     return jsonify({'msg': 'Mensaje recibido correctamente'}), 201

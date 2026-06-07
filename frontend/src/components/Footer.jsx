@@ -9,7 +9,10 @@ export function Footer() {
         Precios obtenidos de mercados públicos (Steam, Skinport, DMarket, Waxpeer y más).
         No afiliado a Valve. Los precios pueden variar en tiempo real.
       </p>
-      <nav className="site-footer__legal" aria-label="Enlaces legales">
+      <nav className="site-footer__legal" aria-label="Enlaces del sitio">
+        <Link to="/como-funciona">Cómo funciona</Link>
+        <Link to="/sobre-nosotros">Sobre nosotros</Link>
+        <Link to="/guias">Guías</Link>
         <Link to="/aviso-legal">Aviso legal</Link>
         <Link to="/privacidad">Privacidad</Link>
         <Link to="/cookies">Cookies</Link>

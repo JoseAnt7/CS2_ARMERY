@@ -17,8 +17,15 @@ import { Privacy } from './Pages/legal/Privacy';
 import { Cookies } from './Pages/legal/Cookies';
 import { Terms } from './Pages/legal/Terms';
 import { Contact } from './Pages/legal/Contact';
+import { HowItWorks } from './Pages/info/HowItWorks';
+import { About } from './Pages/info/About';
+import { GuidesIndex } from './Pages/info/GuidesIndex';
+import { BuySkinsSafelyGuide } from './Pages/info/guides/BuySkinsSafelyGuide';
+import { MarketComparisonGuide } from './Pages/info/guides/MarketComparisonGuide';
+import { Cs2TermsGuide } from './Pages/info/guides/Cs2TermsGuide';
 import { VisitTracker } from './components/VisitTracker';
 import { CookieConsent } from './components/CookieConsent';
+import { AdSenseLoader } from './components/AdSenseLoader';
 import { SeoRouteWatcher } from './components/Seo';
 import './styles/layout.css';
 import './styles/mobile.css';
@@ -50,6 +57,7 @@ function App() {
   return (
     <BrowserRouter>
       <SeoRouteWatcher />
+      <AdSenseLoader />
       <VisitTracker />
       <CSBotProvider>
         <SiteConfigProvider>
@@ -83,6 +91,12 @@ function App() {
                 <Route path="/cookies" element={<Cookies />} />
                 <Route path="/terminos" element={<Terms />} />
                 <Route path="/contacto" element={<Contact />} />
+                <Route path="/como-funciona" element={<HowItWorks />} />
+                <Route path="/sobre-nosotros" element={<About />} />
+                <Route path="/guias" element={<GuidesIndex />} />
+                <Route path="/guias/comprar-skins-cs2-seguro" element={<BuySkinsSafelyGuide />} />
+                <Route path="/guias/steam-vs-skinport-vs-dmarket" element={<MarketComparisonGuide />} />
+                <Route path="/guias/float-exterior-stattrak" element={<Cs2TermsGuide />} />
               </Routes>
             </main>
             <Footer />

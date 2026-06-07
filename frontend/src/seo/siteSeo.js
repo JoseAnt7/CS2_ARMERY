@@ -1,4 +1,5 @@
 import { LEGAL } from '../content/legalSite';
+import { GUIDES, buildHomeFaqJsonLd } from '../content/siteContent';
 
 /** Configuración SEO central (producción: globalskinmetrics.com). */
 export const SITE_SEO = {
@@ -18,8 +19,23 @@ export const SITE_SEO = {
 
 const PUBLIC_ROUTES = {
   '/': {
-    title: 'Global Skin Metrics | Comparador de precios de skins CS2',
+    title: 'Comparador de precios de skins CS2',
     description: SITE_SEO.defaultDescription,
+  },
+  '/como-funciona': {
+    title: 'Cómo funciona el comparador',
+    description:
+      'Aprende cómo Global Skin Metrics compara precios de skins CS2 en Steam, Skinport, DMarket, Waxpeer y más mercados.',
+  },
+  '/sobre-nosotros': {
+    title: 'Sobre nosotros',
+    description:
+      'Conoce al equipo detrás de Global Skin Metrics, nuestra misión y cómo mantenemos el comparador de skins CS2.',
+  },
+  '/guias': {
+    title: 'Guías para compradores de skins CS2',
+    description:
+      'Guías originales sobre compra segura, marketplaces y terminología (float, exterior, StatTrak) en Counter-Strike 2.',
   },
   '/suscripciones': {
     title: 'Suscripciones y herramientas premium',
@@ -72,6 +88,15 @@ export function getSeoForPath(pathname) {
   if (pathname.startsWith('/suscripciones/')) {
     return {
       ...PUBLIC_ROUTES['/suscripciones'],
+      canonicalPath: pathname,
+    };
+  }
+
+  const guide = GUIDES.find((g) => pathname === `/guias/${g.slug}`);
+  if (guide) {
+    return {
+      title: guide.title,
+      description: guide.description,
       canonicalPath: pathname,
     };
   }

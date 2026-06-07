@@ -52,6 +52,14 @@ def create_app():
     from routes_contact import contact_bp
     app.register_blueprint(contact_bp)
 
+    from mail import settings as mail_settings
+
+    if mail_settings.MAIL_ENABLED and not mail_settings.mail_is_configured():
+        app.logger.warning(
+            "Gmail: MAIL_ENABLED activo pero faltan credenciales. "
+            "Completa GMAIL_* en backend/.env"
+        )
+
     return app
 
 def _warm_caches():

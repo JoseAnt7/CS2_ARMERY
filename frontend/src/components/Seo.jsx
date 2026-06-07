@@ -8,6 +8,7 @@ import {
   buildWebsiteJsonLd,
   getSeoForPath,
 } from '../seo/siteSeo';
+import { buildHomeFaqJsonLd } from '../content/siteContent';
 
 function upsertMeta(attr, key, content) {
   if (!content) return;
@@ -98,13 +99,22 @@ export function Seo({
 /** SEO por defecto según la ruta actual (App shell). */
 export function SeoRouteWatcher() {
   const { pathname } = useLocation();
+
+  // Las fichas /arma/:id gestionan su propio SEO con datos del ítem.
+  if (pathname.startsWith('/arma/')) {
+    return null;
+  }
+
   const config = getSeoForPath(pathname);
+  const jsonLdExtra = pathname === '/' ? buildHomeFaqJsonLd() : null;
+
   return (
     <Seo
       title={config.title}
       description={config.description}
       canonicalPath={config.canonicalPath}
       noindex={config.noindex}
+      jsonLdExtra={jsonLdExtra}
     />
   );
 }

@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { fetchCategories, fetchWeaponFilters, fetchWeapons } from '../api/client';
 import { FilterBar } from '../components/FilterBar';
 import { WeaponCard } from '../components/WeaponCard';
+import { HomeEditorial } from '../components/HomeEditorial';
 import '../styles/catalog.css';
+import '../styles/info.css';
 
 const DEFAULT_CATEGORIES = [{ id: 'all', label: 'Todas' }];
 
@@ -78,6 +80,7 @@ export function Home() {
         </h1>
         <p className="hero__subtitle">
           Encuentra dónde comprar más barato entre Steam, Skinport, DMarket, Waxpeer y más mercados en un solo lugar.
+          Comparador gratuito, sin registro obligatorio y con guías para comprar con seguridad.
         </p>
       </section>
 
@@ -117,8 +120,8 @@ export function Home() {
 
       {error && (
         <div className="error-state">
-          <p>No se pudo cargar el catálogo: {error}</p>
-          <p>Comprueba que el backend Flask esté en ejecución (puerto 5000).</p>
+          <p>No se pudo cargar el catálogo en este momento: {error}</p>
+          <p>Inténtalo de nuevo en unos minutos. Si el problema continúa, contáctanos.</p>
         </div>
       )}
 
@@ -157,6 +160,8 @@ export function Home() {
           </nav>
         </>
       )}
+
+      <HomeEditorial />
     </>
   );
 }

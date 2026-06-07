@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Mensaje recibido</title>
+</head>
+<body style="margin:0;padding:0;background:#0a0c10;font-family:Inter,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0c10;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="background:#12151c;border:1px solid #2a2f3a;border-radius:12px;overflow:hidden;">
+          <tr>
+            <td style="padding:20px 24px;background:#181c26;border-bottom:1px solid #2a2f3a;">
+              <img src="{{ logo_url }}" alt="{{ site_name }}" width="40" height="40" style="vertical-align:middle;border-radius:8px;" />
+              <span style="margin-left:12px;color:#e8eaef;font-size:18px;font-weight:600;vertical-align:middle;">{{ site_name }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px;">
+              <h1 style="margin:0 0 12px;color:#e8eaef;font-size:22px;">Hola, {{ name }}</h1>
+              <p style="margin:0 0 12px;color:#c8cdd8;font-size:15px;line-height:1.6;">
+                Hemos recibido tu mensaje sobre <strong style="color:#e8eaef;">{{ topic_label }}</strong>.
+                Nuestro equipo lo revisará y te responderemos lo antes posible.
+              </p>
+              <p style="margin:0 0 12px;color:#8b93a7;font-size:14px;line-height:1.6;">
+                Si tu consulta es urgente, también puedes escribirnos directamente desde la página de contacto del sitio.
+              </p>
+              <p style="margin:16px 0 0;">
+                <a href="{{ app_public_url }}/contacto" style="display:inline-block;background:#f5a623;color:#0a0c10;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:600;font-size:14px;">Ir a contacto</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 24px;border-top:1px solid #2a2f3a;color:#8b93a7;font-size:12px;text-align:center;">
+              {{ site_name }} · <a href="{{ app_public_url }}" style="color:#f5a623;">{{ app_public_url }}</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

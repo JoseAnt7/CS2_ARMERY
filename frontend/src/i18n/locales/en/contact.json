@@ -1,0 +1,20 @@
+{
+  "title": "Contact",
+  "intro": "You can write us for support, general questions or sponsorship proposals. You can also use the emails listed in the <legalLink>Legal notice</legalLink>.",
+  "formTitle": "Contact form",
+  "formPrivacy": "Data you submit will be processed according to our <privacyLink>Privacy policy</privacyLink>.",
+  "name": "Name",
+  "email": "Email",
+  "topic": "Topic",
+  "message": "Message",
+  "submit": "Send message",
+  "sending": "Sending…",
+  "success": "Message sent. We will reply as soon as possible.",
+  "topics": {
+    "support": "Technical support",
+    "general": "General inquiry",
+    "sponsorship": "Sponsorship / partnership",
+    "privacy": "Privacy and data",
+    "other": "Other"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "catalog": "Catálogo",
+    "howItWorks": "Cómo funciona",
+    "about": "Sobre nosotros",
+    "guides": "Guías",
+    "contact": "Contacto",
+    "subscriptions": "Suscripciones",
+    "admin": "Admin",
+    "profile": "Mi perfil",
+    "login": "Iniciar sesión",
+    "logout": "Salir",
+    "hello": "Hola, {{name}}"
+  },
+  "footer": {
+    "disclaimer": "Precios obtenidos de mercados públicos (Steam, Skinport, DMarket, Waxpeer y más). No afiliado a Valve. Los precios pueden variar en tiempo real.",
+    "howItWorks": "Cómo funciona",
+    "about": "Sobre nosotros",
+    "guides": "Guías",
+    "legalNotice": "Aviso legal",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
+    "terms": "Términos",
+    "contact": "Contacto",
+    "cookieSettings": "Configurar cookies",
+    "navLabel": "Enlaces del sitio"
+  },
+  "lang": {
+    "label": "Idioma"
+  },
+  "actions": {
+    "backToCatalog": "← Volver al catálogo",
+    "previous": "← Anterior",
+    "next": "Siguiente →",
+    "seeAllGuides": "Ver todas las guías →",
+    "learnHow": "Descubre cómo funciona el comparador →"
+  },
+  "infoNav": {
+    "howItWorks": "Cómo funciona",
+    "about": "Sobre nosotros",
+    "guides": "Guías",
+    "contact": "Contacto",
+    "catalog": "Catálogo",
+    "label": "Navegación informativa"
+  },
+  "brand": {
+    "alt": "Global Skin Metrics — Comparador de precios"
+  },
+  "menu": {
+    "open": "Abrir menú",
+    "close": "Cerrar menú",
+    "mainNav": "Navegación principal"
+  }
+}

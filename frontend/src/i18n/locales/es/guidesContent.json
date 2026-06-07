@@ -1,0 +1,84 @@
+{
+  "buySafe": {
+    "lead": "Comprar skins en el mercado secundario es habitual entre jugadores de Counter-Strike 2, pero también es un entorno donde conviene actuar con precaución. Esta guía resume buenas prácticas para reducir riesgos de estafa y comprar con tranquilidad.",
+    "sections": [
+      {
+        "heading": "1. Usa marketplaces conocidos",
+        "type": "p",
+        "text": "Prioriza plataformas con historial, sistema de reputación y soporte al cliente. Steam Community Market es la opción oficial dentro del ecosistema Steam; Skinport, DMarket, Waxpeer o CSFloat son alternativas frecuentes en la comunidad. Desconfía de intercambios directos por mensaje privado si no conoces al vendedor."
+      },
+      {
+        "heading": "2. Verifica el listado antes de pagar",
+        "type": "p",
+        "text": "Comprueba que el nombre del ítem, el exterior (Factory New, Field-Tested, etc.) y la variante StatTrak coinciden exactamente con lo que buscas. Un error de una letra puede convertir una «bargaña» en una compra incorrecta. En Global Skin Metrics puedes abrir la ficha del objeto y comparar ofertas antes de saltar al marketplace."
+      },
+      {
+        "heading": "3. Revisa comisiones y precio final",
+        "type": "p",
+        "text": "El precio más bajo en USD no siempre es el más barato al final: suma comisiones de depósito, retirada, conversión de divisa e impuestos locales. Dedica un minuto a calcular el coste total antes de confirmar el pago."
+      },
+      {
+        "heading": "4. Protege tu cuenta de Steam",
+        "type": "ul",
+        "items": [
+          "Activa Steam Guard y no compartas códigos de verificación.",
+          "No inicies sesión en sitios sospechosos que imiten Steam.",
+          "Revisa las ofertas de intercambio en el cliente oficial antes de aceptar.",
+          "Desconfía de premios «demasiado buenos para ser verdad» en redes sociales."
+        ]
+      },
+      {
+        "heading": "5. Guarda comprobantes",
+        "type": "p",
+        "text": "Conserva capturas o correos de confirmación de la compra. Si surge un problema con la entrega, el soporte del marketplace te pedirá identificadores de transacción y fecha."
+      },
+      {
+        "heading": "6. Empieza con importes pequeños",
+        "type": "p",
+        "text": "Si es tu primera compra fuera de Steam, prueba con una skin de poco valor para familiarizarte con el proceso de depósito, compra y retirada al inventario."
+      }
+    ]
+  },
+  "markets": {
+    "lead": "No existe un marketplace «perfecto» para todas las situaciones. Cada plataforma tiene ventajas distintas en comisiones, métodos de pago, catálogo y velocidad. Esta comparativa te ayuda a elegir con criterio.",
+    "sections": [
+      {
+        "heading": "Steam Community Market",
+        "type": "p",
+        "text": "Ventajas: integración total con tu inventario de Steam, sin riesgo de intermediarios externos para la entrega, y acceso directo desde el cliente del juego. Desventajas: el saldo de la cartera Steam no se retira a efectivo; las comisiones de Steam se aplican en cada transacción; algunos precios pueden ser más altos que en mercados alternativos. Ideal para: jugadores que quieren skins en su cuenta de Steam rápidamente."
+      },
+      {
+        "heading": "Skinport",
+        "type": "p",
+        "text": "Ventajas: interfaz clara, pagos con tarjeta y métodos habituales en Europa, catálogo amplio. Desventajas: comisiones de compra y venta; los tiempos de retirada dependen del sistema P2P o automatizado. Ideal para: compradores que prefieren pagar en euros fuera del ecosistema de saldo Steam."
+      },
+      {
+        "heading": "DMarket",
+        "type": "p",
+        "text": "Ventajas: gran volumen de listados, distintas modalidades de compra y promociones frecuentes. Desventajas: curva de aprendizaje mayor para usuarios nuevos; conviene leer las condiciones de cada tipo de listado. Ideal para: usuarios habituados al trading que buscan variedad."
+      }
+    ],
+    "tip": "Usa un comparador como <homeLink>Global Skin Metrics</homeLink> para ver el panorama en USD y luego abre el marketplace que mejor encaje con tu método de pago. Revisa siempre el precio final en la página de checkout."
+  },
+  "terms": {
+    "lead": "Si eres nuevo en el mercado de skins, verás términos como «Field-Tested», «float 0.15» o «StatTrak» en casi todos los listados. Entenderlos evita pagar de más o comprar un objeto distinto al que querías.",
+    "sections": [
+      {
+        "heading": "Exterior (wear)",
+        "type": "p",
+        "text": "El exterior describe el desgaste visual de la skin y se divide en cinco grados: Factory New (FN), Minimal Wear (MW), Field-Tested (FT), Well-Worn (WW) y Battle-Scarred (BS), de mejor a peor estado aparente."
+      },
+      {
+        "heading": "Float (valor de desgaste)",
+        "type": "p",
+        "text": "El float es un número entre 0 y 1 que determina dónde cae la skin dentro de su categoría de exterior. Coleccionistas valoran floats bajos porque afectan a la apariencia. Mercados como CSFloat muestran el float con precisión."
+      },
+      {
+        "heading": "StatTrak™",
+        "type": "p",
+        "text": "Las versiones StatTrak incluyen un contador digital que registra eliminaciones confirmadas en partidas oficiales compatibles. Suelen costar más que la versión normal. No confundas StatTrak con Souvenir: son categorías distintas."
+      }
+    ],
+    "tip": "En el <homeLink>catálogo de Global Skin Metrics</homeLink> filtra por exterior y abre la ficha del ítem para ver ofertas ordenadas. Compara siempre dentro del mismo exterior y variante (StatTrak sí/no) antes de decidirte."
+  }
+}

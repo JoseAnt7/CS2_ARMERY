@@ -1,39 +1,46 @@
 import { Link } from 'react-router-dom';
-import { HOME_FAQ, HOW_IT_WORKS_STEPS, MARKETPLACES } from '../content/siteContent';
-import { LEGAL } from '../content/legalSite';
+import { Trans, useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/info.css';
 
+const STEP_KEYS = ['1', '2', '3', '4'];
+const MARKET_KEYS = ['steam', 'skinport', 'dmarket', 'waxpeer', 'csfloat'];
+const FAQ_KEYS = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'];
+const GUIDE_KEYS = [
+  { route: 'guideBuySafe', key: 'buySafe' },
+  { route: 'guideMarkets', key: 'markets' },
+  { route: 'guideTerms', key: 'terms' },
+];
+
 export function HomeEditorial() {
+  const { to } = useLocale();
+  const { t } = useTranslation('home');
+
   return (
     <div className="home-editorial">
       <section className="home-editorial__section" aria-labelledby="home-about-title">
         <h2 id="home-about-title" className="home-editorial__title">
-          ¿Qué es {LEGAL.siteName}?
+          {t('about.title')}
         </h2>
+        <p>{t('about.p1')}</p>
         <p>
-          Somos un comparador independiente de precios para skins, cuchillos, guantes y objetos de
-          Counter-Strike 2. Consultamos ofertas públicas en varios marketplaces y las ordenamos para
-          que encuentres rápidamente dónde comprar más barato. No vendemos ítems ni gestionamos
-          pagos: te informamos y te redirigimos al mercado donde se completa la transacción.
-        </p>
-        <p>
-          <Link to="/como-funciona">Descubre cómo funciona el comparador →</Link>
+          <Link to={to('howItWorks')}>{t('common:actions.learnHow')}</Link>
         </p>
       </section>
 
       <section className="home-editorial__section" aria-labelledby="home-steps-title">
         <h2 id="home-steps-title" className="home-editorial__title">
-          Cómo funciona en cuatro pasos
+          {t('about.stepsTitle')}
         </h2>
         <ol className="home-steps">
-          {HOW_IT_WORKS_STEPS.map((step, index) => (
-            <li key={step.title} className="home-steps__item">
+          {STEP_KEYS.map((key, index) => (
+            <li key={key} className="home-steps__item">
               <span className="home-steps__num" aria-hidden>
                 {index + 1}
               </span>
               <div>
-                <h3 className="home-steps__heading">{step.title}</h3>
-                <p>{step.text}</p>
+                <h3 className="home-steps__heading">{t(`steps.${key}.title`)}</h3>
+                <p>{t(`steps.${key}.text`)}</p>
               </div>
             </li>
           ))}
@@ -42,13 +49,13 @@ export function HomeEditorial() {
 
       <section className="home-editorial__section" aria-labelledby="home-markets-title">
         <h2 id="home-markets-title" className="home-editorial__title">
-          Mercados que comparamos
+          {t('about.marketsTitle')}
         </h2>
         <ul className="home-markets">
-          {MARKETPLACES.map((market) => (
-            <li key={market.name} className="home-markets__item">
-              <strong>{market.name}</strong>
-              <span>{market.description}</span>
+          {MARKET_KEYS.map((key) => (
+            <li key={key} className="home-markets__item">
+              <strong>{t(`markets.${key}.name`)}</strong>
+              <span>{t(`markets.${key}.desc`)}</span>
             </li>
           ))}
         </ul>
@@ -56,37 +63,30 @@ export function HomeEditorial() {
 
       <section className="home-editorial__section" aria-labelledby="home-guides-title">
         <h2 id="home-guides-title" className="home-editorial__title">
-          Guías para compradores
+          {t('about.guidesTitle')}
         </h2>
-        <p>
-          Además del comparador, publicamos contenido editorial para ayudarte a comprar con criterio
-          y entender el mercado de CS2.
-        </p>
+        <p>{t('about.guidesIntro')}</p>
         <ul className="home-guides-links">
-          <li>
-            <Link to="/guias/comprar-skins-cs2-seguro">Cómo comprar skins CS2 de forma segura</Link>
-          </li>
-          <li>
-            <Link to="/guias/steam-vs-skinport-vs-dmarket">Steam vs Skinport vs DMarket</Link>
-          </li>
-          <li>
-            <Link to="/guias/float-exterior-stattrak">Float, exterior y StatTrak explicados</Link>
-          </li>
+          {GUIDE_KEYS.map(({ route, key }) => (
+            <li key={route}>
+              <Link to={to(route)}>{t(`guideLinks.${key}`)}</Link>
+            </li>
+          ))}
         </ul>
         <p>
-          <Link to="/guias">Ver todas las guías →</Link>
+          <Link to={to('guides')}>{t('common:actions.seeAllGuides')}</Link>
         </p>
       </section>
 
       <section className="home-editorial__section" aria-labelledby="home-faq-title">
         <h2 id="home-faq-title" className="home-editorial__title">
-          Preguntas frecuentes
+          {t('about.faqTitle')}
         </h2>
         <dl className="home-faq">
-          {HOME_FAQ.map((item) => (
-            <div key={item.question} className="home-faq__item">
-              <dt className="home-faq__question">{item.question}</dt>
-              <dd className="home-faq__answer">{item.answer}</dd>
+          {FAQ_KEYS.map((key) => (
+            <div key={key} className="home-faq__item">
+              <dt className="home-faq__question">{t(`faq.${key}.q`)}</dt>
+              <dd className="home-faq__answer">{t(`faq.${key}.a`)}</dd>
             </div>
           ))}
         </dl>
@@ -94,14 +94,33 @@ export function HomeEditorial() {
 
       <section className="home-editorial__trust">
         <p>
-          ¿Tienes dudas o quieres colaborar? Visita{' '}
-          <Link to="/sobre-nosotros">Sobre nosotros</Link> o escríbenos en{' '}
-          <Link to="/contacto">Contacto</Link>. Consulta también nuestro{' '}
-          <Link to="/aviso-legal">Aviso legal</Link> y la <Link to="/privacidad">Política de privacidad</Link>.
+          <Trans
+            i18nKey="about.trust"
+            ns="home"
+            components={{
+              aboutLink: <Link to={to('about')} />,
+              contactLink: <Link to={to('contact')} />,
+              legalLink: <Link to={to('legalNotice')} />,
+              privacyLink: <Link to={to('privacy')} />,
+            }}
+          />
         </p>
       </section>
     </div>
   );
 }
 
-export { buildHomeFaqJsonLd } from '../content/siteContent';
+export function buildHomeFaqJsonLd(t) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_KEYS.map((key) => ({
+      '@type': 'Question',
+      name: t(`faq.${key}.q`),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: t(`faq.${key}.a`),
+      },
+    })),
+  };
+}

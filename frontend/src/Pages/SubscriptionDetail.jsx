@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { fetchSubscriptionDetail, subscribeToPlan } from '../api/client';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/subscriptions.css';
 import '../styles/catalog.css';
 
@@ -14,6 +15,7 @@ function formatPrice(eur) {
 }
 
 export function SubscriptionDetail() {
+  const { to } = useLocale();
   const { slug } = useParams();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState(null);
@@ -37,7 +39,7 @@ export function SubscriptionDetail() {
     setMessage({ type: '', text: '' });
 
     if (!isLoggedIn) {
-      navigate('/cuenta', { state: { from: `/suscripciones/${slug}` } });
+      navigate(to('auth'), { state: { from: to('subscriptionDetail', { slug }) } });
       return;
     }
 
@@ -52,7 +54,7 @@ export function SubscriptionDetail() {
         type: 'success',
         text: `Plan ${plan.name} activado. Puedes verlo en tu perfil.`,
       });
-      setTimeout(() => navigate('/profile', { state: { section: 'subscriptions' } }), 1500);
+      setTimeout(() => navigate(to('profile'), { state: { section: 'subscriptions' } }), 1500);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -73,7 +75,7 @@ export function SubscriptionDetail() {
     return (
       <div className="error-state">
         <p>{error || 'Suscripción no encontrada'}</p>
-        <Link to="/suscripciones" className="back-link">
+        <Link to={to('subscriptions')} className="back-link">
           ← Volver a suscripciones
         </Link>
       </div>
@@ -82,7 +84,7 @@ export function SubscriptionDetail() {
 
   return (
     <>
-      <Link to="/suscripciones" className="back-link">
+      <Link to={to('subscriptions')} className="back-link">
         ← Volver a suscripciones
       </Link>
 

@@ -1,0 +1,16 @@
+{
+  "banner": {
+    "text": "We use necessary cookies for the site to work and, with your permission, advertising cookies (Google AdSense) that may be personalized. You can accept all, reject non-essential cookies or configure them. More in our",
+    "cookiesLink": "Cookie policy",
+    "privacyLink": "Privacy",
+    "and": "and"
+  },
+  "necessary": "Necessary — required (session, preferences).",
+  "ads": "Advertising — Google AdSense ads.",
+  "adsPersonalized": "Personalized ads — based on your visits and interests (only if you accept ads).",
+  "acceptAll": "Accept all",
+  "necessaryOnly": "Necessary only",
+  "configure": "Configure",
+  "back": "Back",
+  "save": "Save preferences"
+}

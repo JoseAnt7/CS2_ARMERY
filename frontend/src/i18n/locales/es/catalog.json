@@ -1,0 +1,67 @@
+{
+  "filters": {
+    "searchPlaceholder": "Buscar skin, arma o patrón...",
+    "searchLabel": "Buscar armas",
+    "categoriesLabel": "Categorías",
+    "all": "Todas",
+    "exterior": "Exterior",
+    "rarity": "Rareza",
+    "sort": "Ordenar",
+    "sortName": "Nombre A-Z",
+    "sortRarity": "Rareza",
+    "allExteriors": "Todos los desgastes",
+    "exteriorLabel": "Filtrar por desgaste",
+    "sortLabel": "Ordenar resultados",
+    "sortPriceAsc": "Precio ↑",
+    "sortPriceDesc": "Precio ↓"
+  },
+  "card": {
+    "from": "desde {{price}}",
+    "seePrices": "Ver precios →",
+    "noImage": "Sin imagen"
+  },
+  "detail": {
+    "avgPrice": "Precio promedio",
+    "avgHint": "Media de {{count}} mercado",
+    "avgHintPlural": "Media de {{count}} mercados",
+    "avgHintSuffix": " con precio disponible",
+    "breadcrumbLabel": "Ruta de navegación",
+    "aboutTitle": "Sobre {{name}}",
+    "compareLink": "Cómo comparamos precios",
+    "safeLink": "Comprar con seguridad",
+    "breadcrumbCatalog": "Catálogo",
+    "notFound": "Objeto no encontrado en el catálogo.",
+    "fallbackSkin": "Skin CS2",
+    "priceSuffix": "— precio CS2",
+    "fallbackDesc": "Consulta el precio y las mejores ofertas de {{name}} en CS2 (Steam, Skinport, DMarket y más).",
+    "compareDesc": "Compara precios de {{name}} en CS2: ofertas en Steam, Skinport, DMarket y más mercados.",
+    "avgHintPrice": " Precio medio aproximado: {{price}}.",
+    "offersTitle": "Top 5 más baratos",
+    "offersSubtitle": "Ordenados de menor a mayor precio en USD · {{count}} fuentes consultadas",
+    "offersEmptyTitle": "Mejores ofertas",
+    "offersEmptySubtitle": "No encontramos precios en este momento. Steam puede limitar peticiones; inténtalo de nuevo en unos minutos.",
+    "noOffers": "Sin datos de mercado disponibles",
+    "buy": "Comprar",
+    "stattrak": "StatTrak™"
+  },
+  "editorial": {
+    "intro": "{{name}} es un {{category}} de Counter-Strike 2{{rarity}}.{{weapon}}{{exterior}}{{stattrak}} En Global Skin Metrics reunimos ofertas públicas para que compares dónde resulta más conveniente comprar este ítem sin tener que revisar cada marketplace por separado.",
+    "priceWithData": "Según nuestra última consulta a {{count}} marketplace{{countSuffix}}, el precio medio orientativo de {{name}} ronda {{avg}}.{{cheapest}} Recuerda que comisiones, impuestos y tipo de cambio pueden modificar el importe final.",
+    "priceNoData": "En este momento no disponemos de precios actualizados para {{name}}. Puedes volver más tarde o consultar directamente Steam Community Market y otros mercados especializados.",
+    "priceNoAvg": "Todavía no hemos podido calcular un precio medio fiable para {{name}}. Los mercados pueden tardar en indexar nuevos listados o limitar temporalmente las consultas.",
+    "cheapest": " La oferta más económica detectada estaba en {{market}} por {{price}}.",
+    "advice": "Antes de comprar, comprueba la reputación del vendedor, las comisiones del mercado y que el listado coincida exactamente con el nombre y exterior que buscas. Global Skin Metrics no participa en la transacción: actuamos como herramienta informativa y te redirigimos al sitio donde se formaliza la compra.",
+    "trader": "Si eres coleccionista o trader, conviene seguir la evolución del precio durante varios días. Las skins de CS2 fluctúan con actualizaciones del juego, torneos profesionales y cambios en la oferta del mercado secundario.",
+    "rarityPrefix": " rareza {{rarity}}",
+    "weaponPrefix": " Pertenece al arma {{weapon}}.",
+    "exteriorPrefix": " El exterior indicado es {{exterior}}.",
+    "stattrakNote": " Esta variante incluye contador StatTrak™, que registra eliminaciones confirmadas en partidas oficiales.",
+    "exteriors": {
+      "Factory New": "Factory New (recién fabricada, sin desgaste visible)",
+      "Minimal Wear": "Minimal Wear (ligeramente desgastada)",
+      "Field-Tested": "Field-Tested (desgaste moderado, la más común en juego)",
+      "Well-Worn": "Well-Worn (desgaste notable)",
+      "Battle-Scarred": "Battle-Scarred (muy desgastada, suele ser la opción más económica)"
+    }
+  }
+}

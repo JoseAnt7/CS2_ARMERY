@@ -12,6 +12,7 @@ import {
 } from '../api/client';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import { applyColorTheme, resolveColorTheme } from '../utils/applyColorTheme';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/admin.css';
 
 const COLOR_THEME_OPTIONS = [
@@ -52,6 +53,7 @@ function getStoredUser() {
 }
 
 export function Admin() {
+  const { to } = useLocale();
   const { refresh: refreshSiteConfig } = useSiteConfig();
   const token = getToken();
   const [forbidden, setForbidden] = useState(false);
@@ -237,7 +239,7 @@ export function Admin() {
   }
 
   if (!token) {
-    return <Navigate to="/cuenta" replace state={{ from: '/admin' }} />;
+    return <Navigate to={to('auth')} replace state={{ from: to('admin') }} />;
   }
 
   if (loading) {
@@ -249,7 +251,7 @@ export function Admin() {
   }
 
   if (forbidden) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={to('home')} replace />;
   }
 
   return (

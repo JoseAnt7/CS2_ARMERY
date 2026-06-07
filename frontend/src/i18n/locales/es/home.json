@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "title": "Compara precios de <span>skins CS2</span>",
+    "subtitle": "Encuentra dónde comprar más barato entre Steam, Skinport, DMarket, Waxpeer y más mercados en un solo lugar. Comparador gratuito, sin registro obligatorio y con guías para comprar con seguridad."
+  },
+  "meta": {
+    "skinsFound": "{{count}} skins encontradas",
+    "pageOf": "Página {{page}} de {{pages}}"
+  },
+  "loading": "Cargando catálogo y precios...",
+  "error": {
+    "load": "No se pudo cargar el catálogo en este momento: {{message}}",
+    "retry": "Inténtalo de nuevo en unos minutos. Si el problema continúa, contáctanos."
+  },
+  "empty": "No hay resultados para tu búsqueda.",
+  "paginationLabel": "Paginación",
+  "about": {
+    "title": "¿Qué es Global Skin Metrics?",
+    "p1": "Somos un comparador independiente de precios para skins, cuchillos, guantes y objetos de Counter-Strike 2. Consultamos ofertas públicas en varios marketplaces y las ordenamos para que encuentres rápidamente dónde comprar más barato. No vendemos ítems ni gestionamos pagos: te informamos y te redirigimos al mercado donde se completa la transacción.",
+    "stepsTitle": "Cómo funciona en cuatro pasos",
+    "marketsTitle": "Mercados que comparamos",
+    "guidesTitle": "Guías para compradores",
+    "guidesIntro": "Además del comparador, publicamos contenido editorial para ayudarte a comprar con criterio y entender el mercado de CS2.",
+    "faqTitle": "Preguntas frecuentes",
+    "trust": "¿Tienes dudas o quieres colaborar? Visita <aboutLink>Sobre nosotros</aboutLink> o escríbenos en <contactLink>Contacto</contactLink>. Consulta también nuestro <legalLink>Aviso legal</legalLink> y la <privacyLink>Política de privacidad</privacyLink>."
+  },
+  "steps": {
+    "1": { "title": "Explora el catálogo", "text": "Busca por nombre, categoría, exterior o rareza entre miles de skins, cuchillos, guantes y objetos de CS2." },
+    "2": { "title": "Comparamos mercados", "text": "Consultamos precios públicos en Steam, Skinport, DMarket, Waxpeer, CSFloat y otras fuentes disponibles." },
+    "3": { "title": "Elige la mejor oferta", "text": "Ordenamos las ofertas de menor a mayor precio en USD para que veas dónde conviene comprar en cada momento." },
+    "4": { "title": "Compra en el marketplace", "text": "Te redirigimos al mercado externo donde se realiza la transacción. Global Skin Metrics no vende ítems ni gestiona pagos." }
+  },
+  "markets": {
+    "steam": { "name": "Steam Community Market", "desc": "Mercado oficial integrado en Steam. Compras con saldo de la cartera; las skins quedan en tu inventario de forma inmediata." },
+    "skinport": { "name": "Skinport", "desc": "Marketplace europeo muy popular por su interfaz clara y pagos con tarjeta o métodos locales." },
+    "dmarket": { "name": "DMarket", "desc": "Plataforma con gran catálogo y distintas modalidades de compra P2P y automatizada." },
+    "waxpeer": { "name": "Waxpeer", "desc": "Mercado alternativo con listados frecuentes; conviene comparar el precio final con comisiones incluidas." },
+    "csfloat": { "name": "CSFloat", "desc": "Especializado en listados con información de float y verificación de pegatinas." }
+  },
+  "guideLinks": {
+    "buySafe": "Cómo comprar skins CS2 de forma segura",
+    "markets": "Steam vs Skinport vs DMarket",
+    "terms": "Float, exterior y StatTrak explicados"
+  },
+  "faq": {
+    "q1": { "q": "¿Qué es Global Skin Metrics?", "a": "Global Skin Metrics es un comparador independiente de precios de skins y objetos de Counter-Strike 2. Reunimos ofertas de varios mercados para ayudarte a decidir dónde comprar más barato." },
+    "q2": { "q": "¿Global Skin Metrics vende skins?", "a": "No. No somos tienda ni intermediarios. Las compras se completan en marketplaces externos como Steam, Skinport o DMarket." },
+    "q3": { "q": "¿Los precios son exactos en tiempo real?", "a": "Los precios se obtienen de fuentes públicas y pueden variar en minutos por ofertas, comisiones o límites de las APIs. Verifica siempre el importe final en el mercado antes de pagar." },
+    "q4": { "q": "¿Estáis afiliados a Valve o Counter-Strike?", "a": "No. No estamos afiliados a Valve Corporation ni a Counter-Strike." },
+    "q5": { "q": "¿Necesito cuenta para usar el comparador?", "a": "No. Puedes consultar precios y ofertas sin registrarte. La cuenta es opcional para funciones como alertas o herramientas premium." },
+    "q6": { "q": "¿De dónde provienen las imágenes e información de los ítems?", "a": "Utilizamos la API pública CSGO-API (ByMykel) y vistas previas de los mercados enlazados. Los datos de precio provienen de los mercados cuando están disponibles." }
+  }
+}

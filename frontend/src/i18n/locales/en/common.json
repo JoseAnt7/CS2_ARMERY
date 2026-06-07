@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "catalog": "Catalog",
+    "howItWorks": "How it works",
+    "about": "About us",
+    "guides": "Guides",
+    "contact": "Contact",
+    "subscriptions": "Subscriptions",
+    "admin": "Admin",
+    "profile": "My profile",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "hello": "Hi, {{name}}"
+  },
+  "footer": {
+    "disclaimer": "Prices from public marketplaces (Steam, Skinport, DMarket, Waxpeer and more). Not affiliated with Valve. Prices may change in real time.",
+    "howItWorks": "How it works",
+    "about": "About us",
+    "guides": "Guides",
+    "legalNotice": "Legal notice",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Terms",
+    "contact": "Contact",
+    "cookieSettings": "Cookie settings",
+    "navLabel": "Site links"
+  },
+  "lang": {
+    "label": "Language"
+  },
+  "actions": {
+    "backToCatalog": "← Back to catalog",
+    "previous": "← Previous",
+    "next": "Next →",
+    "seeAllGuides": "See all guides →",
+    "learnHow": "Learn how the comparator works →"
+  },
+  "infoNav": {
+    "howItWorks": "How it works",
+    "about": "About us",
+    "guides": "Guides",
+    "contact": "Contact",
+    "catalog": "Catalog",
+    "label": "Information navigation"
+  },
+  "brand": {
+    "alt": "Global Skin Metrics — CS2 skin price comparator"
+  },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "mainNav": "Main navigation"
+  }
+}

@@ -1,18 +1,17 @@
 import { LEGAL } from '../content/legalSite';
-import { GUIDES, buildHomeFaqJsonLd } from '../content/siteContent';
+import {
+  matchLocalizedRoute,
+  parseLocalePath,
+  pathForRoute,
+  SUPPORTED_LOCALES,
+  LOCALE_META,
+  DEFAULT_LOCALE,
+} from '../i18n/routePaths';
 
-/** Configuración SEO central (producción: globalskinmetrics.com). */
 export const SITE_SEO = {
   name: LEGAL.siteName,
   titleSuffix: LEGAL.siteName,
   url: LEGAL.url,
-  locale: 'es_ES',
-  language: 'es',
-  defaultTitle: `${LEGAL.siteName} | Comparador de precios de skins CS2`,
-  defaultDescription:
-    'Compara precios de skins, cuchillos y objetos de Counter-Strike 2 en Steam, Skinport, DMarket, Waxpeer y más. Precios actualizados y ofertas en un solo lugar.',
-  defaultKeywords:
-    'CS2 skins, precios skins CS2, comparador skins, Counter-Strike 2, Steam market, Skinport, DMarket, Global Skin Metrics',
   themeColor: '#0a0c10',
   twitterCard: 'summary_large_image',
   ogImage: `${LEGAL.url}/og-global-skin-metrics.png`,
@@ -21,101 +20,81 @@ export const SITE_SEO = {
   ogImageAlt: `${LEGAL.siteName} — comparador de precios de skins CS2`,
 };
 
-const PUBLIC_ROUTES = {
-  '/': {
-    title: 'Comparador de precios de skins CS2',
-    description: SITE_SEO.defaultDescription,
-  },
-  '/como-funciona': {
-    title: 'Cómo funciona el comparador',
-    description:
-      'Aprende cómo Global Skin Metrics compara precios de skins CS2 en Steam, Skinport, DMarket, Waxpeer y más mercados.',
-  },
-  '/sobre-nosotros': {
-    title: 'Sobre nosotros',
-    description:
-      'Conoce al equipo detrás de Global Skin Metrics, nuestra misión y cómo mantenemos el comparador de skins CS2.',
-  },
-  '/guias': {
-    title: 'Guías para compradores de skins CS2',
-    description:
-      'Guías originales sobre compra segura, marketplaces y terminología (float, exterior, StatTrak) en Counter-Strike 2.',
-  },
-  '/suscripciones': {
-    title: 'Suscripciones y herramientas premium',
-    description: `Planes y herramientas premium de ${LEGAL.siteName}: alertas, CSBot y funciones para traders de skins CS2.`,
-  },
-  '/aviso-legal': {
-    title: 'Aviso legal',
-    description: `Información legal y datos del titular del sitio ${LEGAL.siteName}.`,
-    noindex: false,
-  },
-  '/privacidad': {
-    title: 'Política de privacidad',
-    description: `Cómo tratamos tus datos personales en ${LEGAL.siteName} (RGPD).`,
-  },
-  '/cookies': {
-    title: 'Política de cookies',
-    description: `Uso de cookies y publicidad en ${LEGAL.siteName}.`,
-  },
-  '/terminos': {
-    title: 'Términos y condiciones',
-    description: `Condiciones de uso del comparador ${LEGAL.siteName}.`,
-  },
-  '/contacto': {
-    title: 'Contacto',
-    description: `Contacta con el equipo de ${LEGAL.siteName}: soporte y patrocinios.`,
-  },
+const ROUTE_SEO_KEYS = {
+  home: 'home',
+  howItWorks: 'howItWorks',
+  about: 'about',
+  guides: 'guides',
+  guideBuySafe: 'guideBuySafe',
+  guideMarkets: 'guideMarkets',
+  guideTerms: 'guideTerms',
+  contact: 'contact',
+  weapon: 'weapon',
+  subscriptions: 'subscriptions',
+  legalNotice: 'legalNotice',
+  privacy: 'privacy',
+  cookies: 'cookies',
+  terms: 'terms',
 };
 
-const NOINDEX_PREFIXES = ['/admin', '/cuenta', '/profile'];
+const NOINDEX_ROUTES = new Set(['auth', 'profile', 'admin']);
 
-export function getSeoForPath(pathname) {
-  if (NOINDEX_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+export function getLocaleMeta(locale) {
+  return LOCALE_META[locale] || LOCALE_META.es;
+}
+
+export function getSeoForLocalizedPath(pathname, t) {
+  const matched = matchLocalizedRoute(pathname);
+  const locale = matched?.locale || 'es';
+
+  if (matched?.routeId && NOINDEX_ROUTES.has(matched.routeId)) {
     return {
-      title: LEGAL.siteName,
-      description: SITE_SEO.defaultDescription,
+      title: SITE_SEO.name,
+      description: t('defaultDescription'),
       noindex: true,
       canonicalPath: pathname,
+      locale,
     };
   }
 
-  if (pathname.startsWith('/arma/')) {
+  if (matched?.routeId === 'weapon') {
     return {
-      title: 'Precio y ofertas CS2',
-      description:
-        'Consulta el precio medio y las mejores ofertas de esta skin u objeto de CS2 en varios mercados.',
+      title: t('routes.weapon.title'),
+      description: t('routes.weapon.description'),
       canonicalPath: pathname,
+      locale,
     };
   }
 
-  if (pathname.startsWith('/suscripciones/')) {
+  if (matched?.routeId === 'subscriptionDetail') {
     return {
-      ...PUBLIC_ROUTES['/suscripciones'],
+      title: t('routes.subscriptions.title', { defaultValue: t('routes.home.title') }),
+      description: t('defaultDescription'),
       canonicalPath: pathname,
+      locale,
     };
   }
 
-  const guide = GUIDES.find((g) => pathname === `/guias/${g.slug}`);
-  if (guide) {
+  const seoKey = ROUTE_SEO_KEYS[matched?.routeId];
+  if (seoKey) {
     return {
-      title: guide.title,
-      description: guide.description,
+      title: t(`routes.${seoKey}.title`),
+      description: t(`routes.${seoKey}.description`),
       canonicalPath: pathname,
+      locale,
     };
   }
 
   return {
-    ...(PUBLIC_ROUTES[pathname] || {
-      title: SITE_SEO.defaultTitle,
-      description: SITE_SEO.defaultDescription,
-    }),
+    title: t('defaultTitle'),
+    description: t('defaultDescription'),
     canonicalPath: pathname,
+    locale,
   };
 }
 
 export function buildTitle(pageTitle) {
-  if (!pageTitle) return SITE_SEO.defaultTitle;
+  if (!pageTitle) return `${SITE_SEO.name}`;
   return `${pageTitle} | ${SITE_SEO.titleSuffix}`;
 }
 
@@ -124,7 +103,6 @@ export function buildCanonical(path) {
   return `${SITE_SEO.url}${clean}`;
 }
 
-/** Título legible desde slug de URL (/arma/ak-47-redline-ft). */
 export function slugToDisplayTitle(slug) {
   if (!slug) return 'Skin CS2';
   return slug
@@ -162,19 +140,20 @@ export function buildProductJsonLd(weapon, pricing, seoDescription) {
   return product;
 }
 
-export function buildWebsiteJsonLd() {
+export function buildWebsiteJsonLd(locale) {
+  const meta = getLocaleMeta(locale);
+  const basePath = locale === DEFAULT_LOCALE ? '' : `/${locale}`;
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_SEO.name,
-    url: SITE_SEO.url,
-    description: SITE_SEO.defaultDescription,
-    inLanguage: SITE_SEO.language,
+    url: `${SITE_SEO.url}${basePath || '/'}`,
+    inLanguage: meta.htmlLang,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_SEO.url}/?q={search_term_string}`,
+        urlTemplate: `${SITE_SEO.url}${basePath || ''}?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
@@ -189,4 +168,23 @@ export function buildOrganizationJsonLd() {
     url: SITE_SEO.url,
     email: LEGAL.emails.public,
   };
+}
+
+export function buildHreflangLinks(pathname) {
+  return SUPPORTED_LOCALES.map((locale) => ({
+    hreflang: getLocaleMeta(locale).htmlLang,
+    href: buildCanonical(switchLocaleForPath(pathname, locale)),
+  }));
+}
+
+function switchLocaleForPath(pathname, targetLocale) {
+  const matched = matchLocalizedRoute(pathname);
+  if (!matched?.routeId) return pathForRoute(targetLocale, 'home');
+  return pathForRoute(targetLocale, matched.routeId, matched.params || {});
+}
+
+/** @deprecated use getSeoForLocalizedPath */
+export function getSeoForPath(pathname) {
+  const { locale } = parseLocalePath(pathname);
+  return getSeoForLocalizedPath(pathname, (key) => key);
 }

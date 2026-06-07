@@ -1,0 +1,57 @@
+{
+  "howItWorks": {
+    "title": "How Global Skin Metrics works",
+    "intro": "Global Skin Metrics is a free tool to compare CS2 skin and item prices across marketplaces. We save you time and help you make informed decisions before buying on the secondary market.",
+    "stepsTitle": "Step by step",
+    "marketsTitle": "Marketplaces we compare",
+    "marketsIntro": "We currently check public offers on these marketplaces when data is available:",
+    "sourcesTitle": "Where prices come from",
+    "sourcesText": "Amounts come from public APIs and listings. We calculate an indicative average and highlight the five cheapest offers at query time. We cannot guarantee a price is still valid when you open the buy link — the CS2 secondary market changes constantly.",
+    "limitsTitle": "Important limitations",
+    "limits": [
+      "We do not sell skins. Purchases happen on third-party sites under their own terms.",
+      "We are not financial advisors. Information is indicative, not investment advice.",
+      "Steam may rate-limit requests. Some prices may be temporarily unavailable during high demand.",
+      "Fees and exchange rates. The final price may include marketplace fees, currency conversion or withdrawal costs."
+    ],
+    "transparencyTitle": "Link transparency",
+    "transparencyText": "Buy buttons take you directly to the corresponding marketplace. If we use affiliate links in the future, we will state it clearly on this page and in our <termsLink>Terms and conditions</termsLink>. Today we show offers for informational purposes.",
+    "helpTitle": "Need help?",
+    "helpText": "If you have questions about how the comparator works, write us from <contactLink>Contact</contactLink> or read our <guidesLink>buyer guides</guidesLink>."
+  },
+  "about": {
+    "title": "About us",
+    "intro": "<strong>{{siteName}}</strong> started with a simple idea: the CS2 skin market is spread across many platforms and comparing prices manually takes too long. We want to centralize that information clearly, honestly and accessibly for players, collectors and traders at any level.",
+    "missionTitle": "Our mission",
+    "missionText": "Provide a reliable, easy-to-use comparator that shows where to find better prices on CS2 skins, knives, gloves and items — without requiring sign-up or intermediating purchases. We believe price transparency benefits the whole community.",
+    "teamTitle": "Who we are",
+    "teamText": "The project is developed and operated by <strong>{{titulares}}</strong>, based in {{address}}. We combine our interest in Counter-Strike and web development to maintain the catalog and marketplace integrations.",
+    "doTitle": "What we do and don't do",
+    "doYes": [
+      "Yes: we aggregate public prices, show sorted offers and explain how to read the information.",
+      "Yes: we publish legal texts, privacy policy and a real contact channel."
+    ],
+    "doNo": [
+      "No: we do not sell items, hold inventories or process skin payments.",
+      "No: we are not affiliated with Valve Corporation, Steam or Counter-Strike."
+    ],
+    "dataTitle": "Data and image sources",
+    "dataText": "Item images and identifiers come from {{imageSources}}. Prices come from {{externalMarkets}}. We work to keep the catalog updated but depend on each external API's availability.",
+    "hostingTitle": "Infrastructure",
+    "hostingText": "The site is hosted on a {{hostingProduct}} from {{hostingProvider}} ({{hostingLocation}}). We prioritize stability, reasonable load times and GDPR compliance for European users.",
+    "contactTitle": "Contact and partnerships",
+    "contactText": "You can write us for support, suggestions or sponsorship proposals via <contactLink>Contact</contactLink>. We also reply by email at <emailLink>{{email}}</emailLink>.",
+    "footerLinks": "To understand how we collect and show prices, visit <howLink>How it works</howLink>. For safe buying and market terminology, see our <guidesLink>guides</guidesLink>."
+  },
+  "guidesIndex": {
+    "title": "CS2 skin buyer guides",
+    "intro": "These guides are written by the Global Skin Metrics team to help you buy wisely, understand market terminology and choose the right marketplace for your situation. They are original editorial content, separate from the automated catalog listings.",
+    "backCatalog": "Prefer to compare prices directly? Return to the <catalogLink>CS2 skin catalog</catalogLink> or read <howLink>how the comparator works</howLink>."
+  },
+  "guides": {
+    "buySafe": { "title": "How to buy CS2 skins safely", "desc": "Tips to avoid scams and buy with confidence." },
+    "markets": { "title": "Steam vs Skinport vs DMarket", "desc": "When each marketplace makes sense." },
+    "terms": { "title": "Float, wear and StatTrak", "desc": "Key terminology when buying skins." }
+  },
+  "backToGuides": "← Back to all guides"
+}

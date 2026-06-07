@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { fetchCategories, fetchWeaponFilters, fetchWeapons } from '../api/client';
 import { FilterBar } from '../components/FilterBar';
@@ -7,11 +8,10 @@ import { HomeEditorial } from '../components/HomeEditorial';
 import '../styles/catalog.css';
 import '../styles/info.css';
 
-const DEFAULT_CATEGORIES = [{ id: 'all', label: 'Todas' }];
-
 export function Home() {
+  const { t, i18n } = useTranslation(['home', 'catalog', 'common']);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [categories, setCategories] = useState([{ id: 'all', label: t('catalog:filters.all') }]);
   const [category, setCategory] = useState('all');
   const [search, setSearch] = useState(() => searchParams.get('q') || '');
   const [debouncedSearch, setDebouncedSearch] = useState(() => searchParams.get('q') || '');
@@ -27,7 +27,12 @@ export function Home() {
 
   useEffect(() => {
     fetchCategories()
-      .then((res) => setCategories(res.categories))
+      .then((res) => {
+        setCategories([
+          { id: 'all', label: t('catalog:filters.all') },
+          ...res.categories.filter((c) => c.id !== 'all'),
+        ]);
+      })
       .catch(() => {});
 
     fetchWeaponFilters()
@@ -36,7 +41,7 @@ export function Home() {
         setRarityOptions(res.rarities || []);
       })
       .catch(() => {});
-  }, []);
+  }, [t, i18n.language]);
 
   useEffect(() => {
     const urlQ = searchParams.get('q') || '';
@@ -91,16 +96,15 @@ export function Home() {
     loadWeapons();
   }, [loadWeapons]);
 
+  const localeTag = i18n.language === 'en' ? 'en-US' : 'es-ES';
+
   return (
     <>
       <section className="hero">
         <h1 className="hero__title">
-          Compara precios de <span>skins CS2</span>
+          <Trans i18nKey="hero.title" ns="home" components={{ span: <span /> }} />
         </h1>
-        <p className="hero__subtitle">
-          Encuentra dónde comprar más barato entre Steam, Skinport, DMarket, Waxpeer y más mercados en un solo lugar.
-          Comparador gratuito, sin registro obligatorio y con guías para comprar con seguridad.
-        </p>
+        <p className="hero__subtitle">{t('home:hero.subtitle')}</p>
       </section>
 
       <FilterBar
@@ -121,32 +125,28 @@ export function Home() {
 
       {data && (
         <div className="results-meta">
-          <span>
-            {data.total.toLocaleString()} skins encontradas
-          </span>
-          <span>
-            Página {data.page} de {data.pages}
-          </span>
+          <span>{t('home:meta.skinsFound', { count: data.total.toLocaleString(localeTag) })}</span>
+          <span>{t('home:meta.pageOf', { page: data.page, pages: data.pages })}</span>
         </div>
       )}
 
       {loading && (
         <div className="loading-state">
           <div className="spinner" />
-          <p>Cargando catálogo y precios...</p>
+          <p>{t('home:loading')}</p>
         </div>
       )}
 
       {error && (
         <div className="error-state">
-          <p>No se pudo cargar el catálogo en este momento: {error}</p>
-          <p>Inténtalo de nuevo en unos minutos. Si el problema continúa, contáctanos.</p>
+          <p>{t('home:error.load', { message: error })}</p>
+          <p>{t('home:error.retry')}</p>
         </div>
       )}
 
       {!loading && !error && data?.items?.length === 0 && (
         <div className="empty-state">
-          <p>No hay resultados para tu búsqueda.</p>
+          <p>{t('home:empty')}</p>
         </div>
       )}
 
@@ -158,13 +158,13 @@ export function Home() {
             ))}
           </div>
 
-          <nav className="pagination" aria-label="Paginación">
+          <nav className="pagination" aria-label={t('home:paginationLabel')}>
             <button
               type="button"
               disabled={page <= 1}
               onClick={() => setPage((p) => p - 1)}
             >
-              ← Anterior
+              {t('common:actions.previous')}
             </button>
             <span className="pagination__info">
               {page} / {data.pages}
@@ -174,7 +174,7 @@ export function Home() {
               disabled={page >= data.pages}
               onClick={() => setPage((p) => p + 1)}
             >
-              Siguiente →
+              {t('common:actions.next')}
             </button>
           </nav>
         </>

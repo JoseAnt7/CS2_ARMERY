@@ -1,0 +1,20 @@
+{
+  "title": "Contacto",
+  "intro": "Puedes escribirnos para soporte, consultas generales o propuestas de patrocinio. También puedes usar los correos indicados en el <legalLink>Aviso legal</legalLink>.",
+  "formTitle": "Formulario de contacto",
+  "formPrivacy": "Los datos que envíes se tratarán según nuestra <privacyLink>Política de privacidad</privacyLink>.",
+  "name": "Nombre",
+  "email": "Email",
+  "topic": "Motivo",
+  "message": "Mensaje",
+  "submit": "Enviar mensaje",
+  "sending": "Enviando…",
+  "success": "Mensaje enviado. Te responderemos lo antes posible.",
+  "topics": {
+    "support": "Soporte técnico",
+    "general": "Consulta general",
+    "sponsorship": "Patrocinio / colaboración",
+    "privacy": "Privacidad y datos",
+    "other": "Otro"
+  }
+}

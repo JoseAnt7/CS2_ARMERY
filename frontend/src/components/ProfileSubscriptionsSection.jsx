@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchUserSubscriptions } from '../api/client';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/subscriptions.css';
 
 function formatPrice(eur) {
@@ -21,6 +22,7 @@ function formatDate(iso) {
 }
 
 export function ProfileSubscriptionsSection() {
+  const { to } = useLocale();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,7 +48,7 @@ export function ProfileSubscriptionsSection() {
       {!loading && !error && items.length === 0 && (
         <div className="profile-placeholder">
           <p>Aún no tienes ninguna suscripción activa.</p>
-          <Link to="/suscripciones" className="profile-guard__link" style={{ marginTop: '1rem' }}>
+          <Link to={to('subscriptions')} className="profile-guard__link" style={{ marginTop: '1rem' }}>
             Ver planes disponibles
           </Link>
         </div>
@@ -77,7 +79,7 @@ export function ProfileSubscriptionsSection() {
                 </p>
               </div>
               <Link
-                to={`/suscripciones/${item.subscription?.slug}`}
+                to={to('subscriptionDetail', { slug: item.subscription?.slug })}
                 className="user-sub-card__link"
               >
                 Gestionar
@@ -87,7 +89,7 @@ export function ProfileSubscriptionsSection() {
         </ul>
       )}
 
-      <Link to="/suscripciones" className="profile-subs-more">
+      <Link to={to('subscriptions')} className="profile-subs-more">
         Explorar más suscripciones →
       </Link>
     </section>

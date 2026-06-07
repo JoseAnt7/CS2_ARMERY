@@ -1,0 +1,15 @@
+{
+  "routes": {
+    "home": { "title": "CS2 skin price comparator", "description": "Compare CS2 skin, knife and item prices on Steam, Skinport, DMarket, Waxpeer and more. Updated prices and offers in one place." },
+    "howItWorks": { "title": "How the comparator works", "description": "Learn how Global Skin Metrics compares CS2 skin prices across Steam, Skinport, DMarket, Waxpeer and more marketplaces." },
+    "about": { "title": "About us", "description": "Meet the team behind Global Skin Metrics, our mission and how we maintain the CS2 skin comparator." },
+    "guides": { "title": "CS2 skin buyer guides", "description": "Original guides on safe buying, marketplaces and terminology (float, wear, StatTrak) in Counter-Strike 2." },
+    "contact": { "title": "Contact", "description": "Contact the Global Skin Metrics team for support or sponsorships." },
+    "weapon": { "title": "CS2 price and offers", "description": "Check average price and best offers for this CS2 skin or item across several marketplaces." },
+    "guideBuySafe": { "title": "How to buy CS2 skins safely", "description": "Practical tips to avoid scams and buy with confidence on trusted marketplaces." },
+    "guideMarkets": { "title": "Steam vs Skinport vs DMarket", "description": "Compare fees, payment methods, delivery times and when each marketplace makes sense." },
+    "guideTerms": { "title": "Float, wear and StatTrak in CS2", "description": "Guide to understanding wear, float values and StatTrak when buying skins." }
+  },
+  "defaultTitle": "CS2 skin price comparator",
+  "defaultDescription": "Compare CS2 skin, knife and item prices on Steam, Skinport, DMarket, Waxpeer and more."
+}

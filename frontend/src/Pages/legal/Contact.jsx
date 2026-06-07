@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { LegalLayout } from '../../components/LegalLayout';
 import { submitContact } from '../../api/client';
 import { LEGAL } from '../../content/legalSite';
+import { useLocale } from '../../hooks/useLocale';
 
 export function Contact() {
+  const { t } = useTranslation('contact');
+  const { to } = useLocale();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -19,10 +24,7 @@ export function Contact() {
     setLoading(true);
     try {
       await submitContact(form);
-      setFeedback({
-        type: 'success',
-        text: 'Mensaje enviado. Te responderemos lo antes posible.',
-      });
+      setFeedback({ type: 'success', text: t('success') });
       setForm({ name: '', email: '', topic: 'support', message: '' });
     } catch (err) {
       setFeedback({ type: 'error', text: err.message });
@@ -32,31 +34,38 @@ export function Contact() {
   }
 
   return (
-    <LegalLayout title="Contacto">
+    <LegalLayout title={t('title')}>
       <p>
-        Puedes escribirnos para soporte, consultas generales o propuestas de patrocinio. También
-        puedes usar los correos indicados en el <a href="/aviso-legal">Aviso legal</a>.
+        <Trans
+          i18nKey="intro"
+          ns="contact"
+          components={{ legalLink: <Link to={to('legalNotice')} /> }}
+        />
       </p>
 
       <ul>
         <li>
-          Soporte: <a href={`mailto:${LEGAL.emails.support}`}>{LEGAL.emails.support}</a>
+          {t('topics.support')}:{' '}
+          <a href={`mailto:${LEGAL.emails.support}`}>{LEGAL.emails.support}</a>
         </li>
         <li>
-          Patrocinios:{' '}
+          {t('topics.sponsorship')}:{' '}
           <a href={`mailto:${LEGAL.emails.sponsorships}`}>{LEGAL.emails.sponsorships}</a>
         </li>
       </ul>
 
-      <h2>Formulario de contacto</h2>
+      <h2>{t('formTitle')}</h2>
       <p>
-        Los datos que envíes se tratarán según nuestra{' '}
-        <a href="/privacidad">Política de privacidad</a>.
+        <Trans
+          i18nKey="formPrivacy"
+          ns="contact"
+          components={{ privacyLink: <Link to={to('privacy')} /> }}
+        />
       </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
         <label>
-          Nombre
+          {t('name')}
           <input
             type="text"
             value={form.name}
@@ -67,7 +76,7 @@ export function Contact() {
           />
         </label>
         <label>
-          Email
+          {t('email')}
           <input
             type="email"
             value={form.email}
@@ -78,20 +87,20 @@ export function Contact() {
           />
         </label>
         <label>
-          Motivo
+          {t('topic')}
           <select
             value={form.topic}
             onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
           >
-            <option value="support">Soporte técnico</option>
-            <option value="general">Consulta general</option>
-            <option value="sponsorship">Patrocinio / colaboración</option>
-            <option value="privacy">Privacidad y datos</option>
-            <option value="other">Otro</option>
+            {Object.entries(t('topics', { returnObjects: true })).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </label>
         <label>
-          Mensaje
+          {t('message')}
           <textarea
             value={form.message}
             onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
@@ -101,7 +110,7 @@ export function Contact() {
           />
         </label>
         <button type="submit" className="contact-form__submit" disabled={loading}>
-          {loading ? 'Enviando…' : 'Enviar mensaje'}
+          {loading ? t('sending') : t('submit')}
         </button>
       </form>
 

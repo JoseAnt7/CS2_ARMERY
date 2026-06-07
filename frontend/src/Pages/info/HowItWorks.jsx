@@ -1,84 +1,70 @@
 import { Link } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { InfoLayout } from '../../components/InfoLayout';
-import { HOW_IT_WORKS_STEPS, MARKETPLACES } from '../../content/siteContent';
-import { LEGAL } from '../../content/legalSite';
+import { useLocale } from '../../hooks/useLocale';
+
+const STEP_KEYS = ['1', '2', '3', '4'];
+const MARKET_KEYS = ['steam', 'skinport', 'dmarket', 'waxpeer', 'csfloat'];
 
 export function HowItWorks() {
-  return (
-    <InfoLayout title="Cómo funciona Global Skin Metrics">
-      <p>
-        {LEGAL.siteName} es una herramienta gratuita para comparar precios de skins y objetos de
-        Counter-Strike 2 en distintos mercados. Nuestro objetivo es ahorrarte tiempo y ayudarte a
-        tomar decisiones informadas antes de comprar en el mercado secundario.
-      </p>
+  const { t } = useTranslation(['info', 'home']);
+  const { to } = useLocale();
 
-      <h2>Proceso paso a paso</h2>
+  return (
+    <InfoLayout title={t('info:howItWorks.title')}>
+      <p>{t('info:howItWorks.intro')}</p>
+
+      <h2>{t('info:howItWorks.stepsTitle')}</h2>
       <ol className="info-steps">
-        {HOW_IT_WORKS_STEPS.map((step, index) => (
-          <li key={step.title}>
+        {STEP_KEYS.map((key, index) => (
+          <li key={key}>
             <strong>
-              {index + 1}. {step.title}
+              {index + 1}. {t(`home:steps.${key}.title`)}
             </strong>
-            <p>{step.text}</p>
+            <p>{t(`home:steps.${key}.text`)}</p>
           </li>
         ))}
       </ol>
 
-      <h2>Mercados que comparamos</h2>
-      <p>
-        Actualmente consultamos ofertas públicas en los siguientes marketplaces cuando hay datos
-        disponibles. La lista puede ampliarse según integremos nuevas fuentes:
-      </p>
+      <h2>{t('info:howItWorks.marketsTitle')}</h2>
+      <p>{t('info:howItWorks.marketsIntro')}</p>
       <ul>
-        {MARKETPLACES.map((market) => (
-          <li key={market.name}>
-            <strong>{market.name}</strong> — {market.description}
+        {MARKET_KEYS.map((key) => (
+          <li key={key}>
+            <strong>{t(`home:markets.${key}.name`)}</strong> — {t(`home:markets.${key}.desc`)}
           </li>
         ))}
       </ul>
 
-      <h2>De dónde salen los precios</h2>
-      <p>
-        Los importes mostrados provienen de APIs y listados públicos de cada marketplace. Calculamos
-        un precio medio orientativo y destacamos las cinco ofertas más baratas que detectamos en el
-        momento de la consulta. No garantizamos que un precio siga vigente al abrir el enlace de
-        compra: el mercado secundario de CS2 es dinámico y los listados cambian constantemente.
-      </p>
+      <h2>{t('info:howItWorks.sourcesTitle')}</h2>
+      <p>{t('info:howItWorks.sourcesText')}</p>
 
-      <h2>Limitaciones importantes</h2>
+      <h2>{t('info:howItWorks.limitsTitle')}</h2>
       <ul>
-        <li>
-          <strong>No vendemos skins.</strong> Las transacciones se realizan en sitios de terceros bajo
-          sus propias condiciones.
-        </li>
-        <li>
-          <strong>No somos asesores financieros.</strong> La información es orientativa y no
-          constituye recomendación de inversión.
-        </li>
-        <li>
-          <strong>Steam puede limitar consultas.</strong> En momentos de alta demanda algunos precios
-          pueden no estar disponibles temporalmente.
-        </li>
-        <li>
-          <strong>Comisiones y tipo de cambio.</strong> El precio final puede incluir tasas del
-          marketplace, conversión de divisa o retirada de fondos.
-        </li>
+        {(t('info:howItWorks.limits', { returnObjects: true }) || []).map((item) => (
+          <li key={item}>{item}</li>
+        ))}
       </ul>
 
-      <h2>Transparencia sobre enlaces</h2>
+      <h2>{t('info:howItWorks.transparencyTitle')}</h2>
       <p>
-        Los botones «Comprar» te llevan directamente al marketplace correspondiente. En algunos casos
-        podríamos utilizar enlaces de afiliado en el futuro; si lo hacemos, lo indicaremos de forma
-        clara en esta página y en nuestros{' '}
-        <Link to="/terminos">Términos y condiciones</Link>. Hoy mostramos ofertas con fines
-        informativos para el usuario.
+        <Trans
+          i18nKey="howItWorks.transparencyText"
+          ns="info"
+          components={{ termsLink: <Link to={to('terms')} /> }}
+        />
       </p>
 
-      <h2>¿Necesitas ayuda?</h2>
+      <h2>{t('info:howItWorks.helpTitle')}</h2>
       <p>
-        Si tienes dudas sobre el funcionamiento del comparador, escríbenos desde la página de{' '}
-        <Link to="/contacto">Contacto</Link> o consulta nuestras{' '}
-        <Link to="/guias">guías para compradores</Link>.
+        <Trans
+          i18nKey="howItWorks.helpText"
+          ns="info"
+          components={{
+            contactLink: <Link to={to('contact')} />,
+            guidesLink: <Link to={to('guides')} />,
+          }}
+        />
       </p>
     </InfoLayout>
   );

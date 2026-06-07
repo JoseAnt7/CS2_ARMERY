@@ -1,0 +1,67 @@
+{
+  "filters": {
+    "searchPlaceholder": "Search skin, weapon or pattern...",
+    "searchLabel": "Search items",
+    "categoriesLabel": "Categories",
+    "all": "All",
+    "exterior": "Wear",
+    "rarity": "Rarity",
+    "sort": "Sort",
+    "sortName": "Name A-Z",
+    "sortRarity": "Rarity",
+    "allExteriors": "All wear levels",
+    "exteriorLabel": "Filter by wear",
+    "sortLabel": "Sort results",
+    "sortPriceAsc": "Price ↑",
+    "sortPriceDesc": "Price ↓"
+  },
+  "card": {
+    "from": "from {{price}}",
+    "seePrices": "See prices →",
+    "noImage": "No image"
+  },
+  "detail": {
+    "avgPrice": "Average price",
+    "avgHint": "Average from {{count}} marketplace",
+    "avgHintPlural": "Average from {{count}} marketplaces",
+    "avgHintSuffix": " with price available",
+    "breadcrumbLabel": "Breadcrumb",
+    "aboutTitle": "About {{name}}",
+    "compareLink": "How we compare prices",
+    "safeLink": "Buy safely",
+    "breadcrumbCatalog": "Catalog",
+    "notFound": "Item not found in the catalog.",
+    "fallbackSkin": "CS2 skin",
+    "priceSuffix": "— CS2 price",
+    "fallbackDesc": "Check prices and best offers for {{name}} on CS2 (Steam, Skinport, DMarket and more).",
+    "compareDesc": "Compare prices for {{name}} on CS2: offers on Steam, Skinport, DMarket and more marketplaces.",
+    "avgHintPrice": " Approximate average price: {{price}}.",
+    "offersTitle": "Top 5 cheapest",
+    "offersSubtitle": "Sorted lowest to highest in USD · {{count}} sources checked",
+    "offersEmptyTitle": "Best offers",
+    "offersEmptySubtitle": "No prices found right now. Steam may rate-limit requests; try again in a few minutes.",
+    "noOffers": "No market data available",
+    "buy": "Buy",
+    "stattrak": "StatTrak™"
+  },
+  "editorial": {
+    "intro": "{{name}} is a CS2 {{category}}{{rarity}}.{{weapon}}{{exterior}}{{stattrak}} On Global Skin Metrics we gather public offers so you can compare where to buy this item without checking each marketplace separately.",
+    "priceWithData": "Based on our latest check of {{count}} marketplace{{countSuffix}}, the indicative average price of {{name}} is around {{avg}}.{{cheapest}} Remember that fees, taxes and exchange rates may change the final amount.",
+    "priceNoData": "We do not have updated prices for {{name}} right now. Check back later or browse Steam Community Market and other specialized sites directly.",
+    "priceNoAvg": "We could not calculate a reliable average price for {{name}} yet. Markets may take time to index new listings or temporarily limit API requests.",
+    "cheapest": " The cheapest offer we found was on {{market}} at {{price}}.",
+    "advice": "Before buying, verify seller reputation, marketplace fees, and that the listing matches the exact name and wear you want. Global Skin Metrics does not take part in the transaction — we provide information and redirect you to the purchase site.",
+    "trader": "If you collect or trade, track price trends over several days. CS2 skins move with game updates, pro tournaments and secondary market supply.",
+    "rarityPrefix": " {{rarity}} rarity",
+    "weaponPrefix": " It belongs to the {{weapon}} weapon.",
+    "exteriorPrefix": " The listed wear is {{exterior}}.",
+    "stattrakNote": " This StatTrak™ variant counts confirmed kills in eligible official matches.",
+    "exteriors": {
+      "Factory New": "Factory New (mint condition, no visible wear)",
+      "Minimal Wear": "Minimal Wear (slightly worn)",
+      "Field-Tested": "Field-Tested (moderate wear, very common in-game)",
+      "Well-Worn": "Well-Worn (noticeable wear)",
+      "Battle-Scarred": "Battle-Scarred (heavy wear, often the cheapest option)"
+    }
+  }
+}

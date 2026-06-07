@@ -11,6 +11,7 @@ seo_bp = Blueprint("seo", __name__)
 
 SITE_URL = os.environ.get("SITE_URL", "https://globalskinmetrics.com").rstrip("/")
 SITEMAP_MAX_URLS = 50_000
+SUPPORTED_LOCALES = ("es", "en")
 
 # Debe coincidir con frontend/public/ads.txt y el client en index.html
 ADSENSE_PUBLISHER_ID = os.environ.get("ADSENSE_PUBLISHER_ID", "pub-7858627003457160")
@@ -18,20 +19,34 @@ ADS_TXT_BODY = (
     f"google.com, {ADSENSE_PUBLISHER_ID}, DIRECT, f08c47fec0942fa0\n"
 )
 
-STATIC_PATHS = [
-    ("/", "daily", "1.0"),
-    ("/como-funciona", "monthly", "0.9"),
-    ("/sobre-nosotros", "monthly", "0.8"),
-    ("/guias", "monthly", "0.8"),
-    ("/guias/comprar-skins-cs2-seguro", "monthly", "0.7"),
-    ("/guias/steam-vs-skinport-vs-dmarket", "monthly", "0.7"),
-    ("/guias/float-exterior-stattrak", "monthly", "0.7"),
-    ("/suscripciones", "weekly", "0.7"),
-    ("/contacto", "monthly", "0.5"),
-    ("/aviso-legal", "yearly", "0.3"),
-    ("/privacidad", "yearly", "0.3"),
-    ("/cookies", "yearly", "0.3"),
-    ("/terminos", "yearly", "0.3"),
+# Rutas estáticas localizadas: (locale, segmento, changefreq, priority)
+LOCALIZED_STATIC_PATHS = [
+    ("es", "", "daily", "1.0"),
+    ("en", "", "daily", "1.0"),
+    ("es", "como-funciona", "monthly", "0.9"),
+    ("en", "how-it-works", "monthly", "0.9"),
+    ("es", "sobre-nosotros", "monthly", "0.8"),
+    ("en", "about-us", "monthly", "0.8"),
+    ("es", "guias", "monthly", "0.8"),
+    ("en", "guides", "monthly", "0.8"),
+    ("es", "guias/comprar-skins-cs2-seguro", "monthly", "0.7"),
+    ("en", "guides/buy-cs2-skins-safely", "monthly", "0.7"),
+    ("es", "guias/steam-vs-skinport-vs-dmarket", "monthly", "0.7"),
+    ("en", "guides/steam-vs-skinport-vs-dmarket", "monthly", "0.7"),
+    ("es", "guias/float-exterior-stattrak", "monthly", "0.7"),
+    ("en", "guides/float-exterior-stattrak", "monthly", "0.7"),
+    ("es", "suscripciones", "weekly", "0.7"),
+    ("en", "subscriptions", "weekly", "0.7"),
+    ("es", "contacto", "monthly", "0.5"),
+    ("en", "contact", "monthly", "0.5"),
+    ("es", "aviso-legal", "yearly", "0.3"),
+    ("en", "legal-notice", "yearly", "0.3"),
+    ("es", "privacidad", "yearly", "0.3"),
+    ("en", "privacy", "yearly", "0.3"),
+    ("es", "cookies", "yearly", "0.3"),
+    ("en", "cookies", "yearly", "0.3"),
+    ("es", "terminos", "yearly", "0.3"),
+    ("en", "terms", "yearly", "0.3"),
 ]
 
 
@@ -77,19 +92,29 @@ def _build_sitemap_index(sitemap_urls):
     )
 
 
+def _path_for_locale(locale, segment):
+    if locale == "es":
+        return f"/{segment}" if segment else "/"
+    return f"/en/{segment}" if segment else "/en"
+
+
 def _weapon_url_entries(items, lastmod):
     lines = []
     for item in items:
         weapon_id = item.get("id")
         if not weapon_id:
             continue
-        loc = f"{SITE_URL}/arma/{weapon_id}"
-        lines.append(_url_entry(loc, "weekly", "0.8", lastmod))
+        lines.append(_url_entry(f"{SITE_URL}/arma/{weapon_id}", "weekly", "0.8", lastmod))
+        lines.append(_url_entry(f"{SITE_URL}/en/arma/{weapon_id}", "weekly", "0.8", lastmod))
     return "".join(lines)
 
 
 def _static_entries():
-    return "".join(_url_entry(f"{SITE_URL}{path}", cf, pr) for path, cf, pr in STATIC_PATHS)
+    lines = []
+    for locale, segment, cf, pr in LOCALIZED_STATIC_PATHS:
+        path = _path_for_locale(locale, segment)
+        lines.append(_url_entry(f"{SITE_URL}{path}", cf, pr))
+    return "".join(lines)
 
 
 @seo_bp.route("/ads.txt", methods=["GET"])
@@ -107,9 +132,9 @@ def sitemap_index_or_single():
         weapon_chunks.append(cat[i : i + SITEMAP_MAX_URLS])
 
     lastmod = _lastmod()
-    static_count = len(STATIC_PATHS)
+    static_count = len(LOCALIZED_STATIC_PATHS)
 
-    if len(cat) + static_count <= SITEMAP_MAX_URLS:
+    if len(cat) * len(SUPPORTED_LOCALES) + static_count <= SITEMAP_MAX_URLS:
         entries = _static_entries() + _weapon_url_entries(cat, lastmod)
         xml = _build_urlset(entries)
     else:

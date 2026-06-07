@@ -1,0 +1,84 @@
+{
+  "buySafe": {
+    "lead": "Buying skins on the secondary market is common among CS2 players, but it is also an environment where caution pays off. This guide summarizes good practices to reduce scam risk and buy with confidence.",
+    "sections": [
+      {
+        "heading": "1. Use well-known marketplaces",
+        "type": "p",
+        "text": "Prioritize platforms with a track record, reputation systems and customer support. Steam Community Market is the official option within Steam; Skinport, DMarket, Waxpeer or CSFloat are frequent community alternatives. Be wary of direct trades via private messages if you do not know the seller."
+      },
+      {
+        "heading": "2. Verify the listing before paying",
+        "type": "p",
+        "text": "Check that the item name, wear (Factory New, Field-Tested, etc.) and StatTrak variant match exactly what you want. A single character mistake can turn a \"bargain\" into the wrong purchase. On Global Skin Metrics you can open the item page and compare offers before jumping to the marketplace."
+      },
+      {
+        "heading": "3. Review fees and final price",
+        "type": "p",
+        "text": "The lowest USD price is not always the cheapest overall: add deposit fees, withdrawal, currency conversion and local taxes. Take a minute to calculate total cost before confirming payment."
+      },
+      {
+        "heading": "4. Protect your Steam account",
+        "type": "ul",
+        "items": [
+          "Enable Steam Guard and never share verification codes.",
+          "Do not log in on suspicious sites that mimic Steam.",
+          "Review trade offers in the official client before accepting.",
+          "Be skeptical of prizes that are too good to be true on social media."
+        ]
+      },
+      {
+        "heading": "5. Keep receipts",
+        "type": "p",
+        "text": "Keep screenshots or confirmation emails. If there is a delivery issue, marketplace support will ask for transaction IDs and dates."
+      },
+      {
+        "heading": "6. Start with small amounts",
+        "type": "p",
+        "text": "If it is your first purchase outside Steam, try a low-value skin to learn deposit, purchase and inventory withdrawal steps."
+      }
+    ]
+  },
+  "markets": {
+    "lead": "There is no \"perfect\" marketplace for every situation. Each platform has different strengths in fees, payment methods, catalog and speed. This comparison helps you choose wisely.",
+    "sections": [
+      {
+        "heading": "Steam Community Market",
+        "type": "p",
+        "text": "Pros: full integration with your Steam inventory, no external intermediary for delivery, direct access from the game client. Cons: Steam wallet balance cannot be withdrawn as cash; Steam fees apply on every trade; some prices may be higher than alternative markets. Best for: players who want skins on their Steam account quickly."
+      },
+      {
+        "heading": "Skinport",
+        "type": "p",
+        "text": "Pros: clear interface, card payments and common European methods, wide catalog. Cons: buy/sell fees; withdrawal times depend on P2P or automated listing. Best for: buyers who prefer paying in euros outside the Steam wallet ecosystem."
+      },
+      {
+        "heading": "DMarket",
+        "type": "p",
+        "text": "Pros: large listing volume, multiple purchase modes and frequent promotions. Cons: steeper learning curve for new users; read conditions for each listing type. Best for: experienced traders looking for variety."
+      }
+    ],
+    "tip": "Use a comparator like <homeLink>Global Skin Metrics</homeLink> to see the USD landscape, then open the marketplace that fits your payment method. Always verify the final price on the checkout page."
+  },
+  "terms": {
+    "lead": "If you are new to the skin market, you will see terms like \"Field-Tested\", \"float 0.15\" or \"StatTrak\" on almost every listing. Understanding them helps you avoid overpaying or buying the wrong item.",
+    "sections": [
+      {
+        "heading": "Wear (exterior)",
+        "type": "p",
+        "text": "Wear describes the visual condition of a skin in five grades: Factory New (FN), Minimal Wear (MW), Field-Tested (FT), Well-Worn (WW) and Battle-Scarred (BS), from best to most worn appearance."
+      },
+      {
+        "heading": "Float (wear value)",
+        "type": "p",
+        "text": "Float is a number between 0 and 1 that places the skin within its wear category. Collectors value low floats because they affect appearance. Markets like CSFloat show float precisely."
+      },
+      {
+        "heading": "StatTrak™",
+        "type": "p",
+        "text": "StatTrak versions include a digital counter for confirmed kills in eligible official matches. They usually cost more than the normal version. Do not confuse StatTrak with Souvenir — they are different categories."
+      }
+    ],
+    "tip": "On the <homeLink>Global Skin Metrics catalog</homeLink> filter by wear and open the item page for sorted offers. Always compare within the same wear and variant (StatTrak yes/no) before deciding."
+  }
+}

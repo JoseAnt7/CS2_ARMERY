@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { deleteAccount, fetchProfile, updateProfile } from '../api/client';
 import { ProfileSubscriptionsSection } from '../components/ProfileSubscriptionsSection';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/profile.css';
 import '../styles/auth.css';
 
@@ -206,6 +207,7 @@ function DeleteSection() {
 }
 
 export function Profile() {
+  const { to } = useLocale();
   const token = localStorage.getItem('access_token');
   const location = useLocation();
   const [activeSection, setActiveSection] = useState(
@@ -243,7 +245,7 @@ export function Profile() {
   }, [token]);
 
   if (!token) {
-    return <Navigate to="/cuenta" replace />;
+    return <Navigate to={to('auth')} replace />;
   }
 
   if (loading) {
@@ -259,7 +261,7 @@ export function Profile() {
     return (
       <div className="profile-guard">
         <p>{error || 'No se pudo cargar el perfil'}</p>
-        <Link to="/cuenta" className="profile-guard__link">
+        <Link to={to('auth')} className="profile-guard__link">
           Iniciar sesión
         </Link>
       </div>

@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "title": "Compare <span>CS2 skin</span> prices",
+    "subtitle": "Find where to buy cheaper across Steam, Skinport, DMarket, Waxpeer and more — in one place. Free comparator, no sign-up required, with guides to buy safely."
+  },
+  "meta": {
+    "skinsFound": "{{count}} skins found",
+    "pageOf": "Page {{page}} of {{pages}}"
+  },
+  "loading": "Loading catalog and prices...",
+  "error": {
+    "load": "Could not load the catalog right now: {{message}}",
+    "retry": "Please try again in a few minutes. If the problem continues, contact us."
+  },
+  "empty": "No results for your search.",
+  "paginationLabel": "Pagination",
+  "about": {
+    "title": "What is Global Skin Metrics?",
+    "p1": "We are an independent price comparator for CS2 skins, knives, gloves and items. We gather public offers from several marketplaces and sort them so you can quickly see where to buy cheaper. We do not sell items or process payments — we inform you and redirect you to the marketplace where the purchase is completed.",
+    "stepsTitle": "How it works in four steps",
+    "marketsTitle": "Marketplaces we compare",
+    "guidesTitle": "Buyer guides",
+    "guidesIntro": "Besides the comparator, we publish original content to help you buy wisely and understand the CS2 market.",
+    "faqTitle": "Frequently asked questions",
+    "trust": "Questions or want to collaborate? Visit <aboutLink>About us</aboutLink> or write us at <contactLink>Contact</contactLink>. See also our <legalLink>Legal notice</legalLink> and <privacyLink>Privacy policy</privacyLink>."
+  },
+  "steps": {
+    "1": { "title": "Browse the catalog", "text": "Search by name, category, wear or rarity among thousands of CS2 skins, knives, gloves and items." },
+    "2": { "title": "We compare marketplaces", "text": "We check public prices on Steam, Skinport, DMarket, Waxpeer, CSFloat and other sources when available." },
+    "3": { "title": "Pick the best offer", "text": "Offers are sorted lowest to highest in USD so you see where it is cheapest right now." },
+    "4": { "title": "Buy on the marketplace", "text": "We redirect you to the external site where the transaction happens. Global Skin Metrics does not sell items." }
+  },
+  "markets": {
+    "steam": { "name": "Steam Community Market", "desc": "Official Steam market. Purchases use wallet balance; skins go to your inventory immediately." },
+    "skinport": { "name": "Skinport", "desc": "Popular European marketplace with card payments and a clear interface." },
+    "dmarket": { "name": "DMarket", "desc": "Large catalog with P2P and automated listing options." },
+    "waxpeer": { "name": "Waxpeer", "desc": "Alternative market with frequent listings; compare final price including fees." },
+    "csfloat": { "name": "CSFloat", "desc": "Specialized in float values and sticker verification." }
+  },
+  "guideLinks": {
+    "buySafe": "How to buy CS2 skins safely",
+    "markets": "Steam vs Skinport vs DMarket",
+    "terms": "Float, wear and StatTrak explained"
+  },
+  "faq": {
+    "q1": { "q": "What is Global Skin Metrics?", "a": "Global Skin Metrics is an independent CS2 skin price comparator. We gather offers from several marketplaces to help you decide where to buy cheaper." },
+    "q2": { "q": "Does Global Skin Metrics sell skins?", "a": "No. We are not a store or intermediary. Purchases happen on external marketplaces like Steam or Skinport." },
+    "q3": { "q": "Are prices exact in real time?", "a": "Prices come from public sources and can change within minutes. Always verify the final amount on the marketplace before paying." },
+    "q4": { "q": "Are you affiliated with Valve or Counter-Strike?", "a": "No. We are not affiliated with Valve Corporation or Counter-Strike." },
+    "q5": { "q": "Do I need an account to use the comparator?", "a": "No. You can check prices without signing up. An account is optional for alerts or premium tools." },
+    "q6": { "q": "Where do item images and data come from?", "a": "We use public CSGO-API (ByMykel) and linked marketplace previews. Price data comes from the linked markets when available." }
+  }
+}

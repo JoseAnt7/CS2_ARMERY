@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   applyGoogleConsentMode,
   getCookieConsent,
   hasConsentChoice,
   setCookieConsent,
 } from '../utils/cookieConsent';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/legal.css';
 
 export function CookieConsent() {
+  const { t } = useTranslation('cookies');
+  const { to } = useLocale();
   const [visible, setVisible] = useState(false);
   const [showPrefs, setShowPrefs] = useState(false);
   const [ads, setAds] = useState(false);
@@ -69,18 +73,18 @@ export function CookieConsent() {
       <div className="cookie-banner__inner">
         <div>
           <p id="cookie-banner-title" className="cookie-banner__text">
-            Usamos cookies necesarias para el funcionamiento del sitio y, con tu permiso,
-            cookies de publicidad (Google AdSense) que pueden personalizarse según tus
-            intereses. Puedes aceptar todas, rechazar las no esenciales o configurarlas. Más
-            información en nuestra <Link to="/cookies">Política de cookies</Link> y{' '}
-            <Link to="/privacidad">Privacidad</Link>.
+            {t('banner.text')}{' '}
+            <Link to={to('cookies')}>{t('banner.cookiesLink')}</Link> {t('banner.and')}{' '}
+            <Link to={to('privacy')}>{t('banner.privacyLink')}</Link>.
           </p>
           {showPrefs && (
             <div className="cookie-banner__prefs">
               <label className="cookie-banner__pref">
                 <input type="checkbox" checked disabled readOnly />
                 <span>
-                  <strong>Necesarias</strong> — imprescindibles (sesión, preferencias).
+                  <strong>{t('necessary').split(' — ')[0]}</strong>
+                  {' — '}
+                  {t('necessary').split(' — ')[1]}
                 </span>
               </label>
               <label className="cookie-banner__pref">
@@ -94,7 +98,9 @@ export function CookieConsent() {
                   }}
                 />
                 <span>
-                  <strong>Publicidad</strong> — anuncios de Google AdSense.
+                  <strong>{t('ads').split(' — ')[0]}</strong>
+                  {' — '}
+                  {t('ads').split(' — ')[1]}
                 </span>
               </label>
               <label className="cookie-banner__pref">
@@ -105,8 +111,9 @@ export function CookieConsent() {
                   onChange={(e) => setAdsPersonalized(e.target.checked)}
                 />
                 <span>
-                  <strong>Publicidad personalizada</strong> — según tus visitas e intereses
-                  (solo si aceptas publicidad).
+                  <strong>{t('adsPersonalized').split(' — ')[0]}</strong>
+                  {' — '}
+                  {t('adsPersonalized').split(' — ')[1]}
                 </span>
               </label>
             </div>
@@ -116,22 +123,30 @@ export function CookieConsent() {
           {showPrefs ? (
             <>
               <button type="button" className="cookie-banner__btn" onClick={() => setShowPrefs(false)}>
-                Volver
+                {t('back')}
               </button>
-              <button type="button" className="cookie-banner__btn cookie-banner__btn--primary" onClick={savePreferences}>
-                Guardar preferencias
+              <button
+                type="button"
+                className="cookie-banner__btn cookie-banner__btn--primary"
+                onClick={savePreferences}
+              >
+                {t('save')}
               </button>
             </>
           ) : (
             <>
               <button type="button" className="cookie-banner__btn" onClick={acceptNecessaryOnly}>
-                Solo necesarias
+                {t('necessaryOnly')}
               </button>
               <button type="button" className="cookie-banner__btn" onClick={() => setShowPrefs(true)}>
-                Configurar
+                {t('configure')}
               </button>
-              <button type="button" className="cookie-banner__btn cookie-banner__btn--primary" onClick={acceptAll}>
-                Aceptar todas
+              <button
+                type="button"
+                className="cookie-banner__btn cookie-banner__btn--primary"
+                onClick={acceptAll}
+              >
+                {t('acceptAll')}
               </button>
             </>
           )}

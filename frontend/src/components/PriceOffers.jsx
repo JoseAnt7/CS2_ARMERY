@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/detail.css';
 
-function formatPrice(usd) {
-  return new Intl.NumberFormat('en-US', {
+function formatPrice(usd, locale) {
+  return new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'es-ES', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
@@ -9,25 +11,25 @@ function formatPrice(usd) {
 }
 
 export function PriceOffers({ pricing }) {
+  const { locale } = useLocale();
+  const { t } = useTranslation('catalog');
   const offers = pricing?.top_cheapest ?? [];
 
   if (!offers.length) {
     return (
       <div className="offers-panel">
-        <h2 className="offers-panel__title">Mejores ofertas</h2>
-        <p className="offers-panel__subtitle">
-          No encontramos precios en este momento. Steam puede limitar peticiones; inténtalo de nuevo en unos minutos.
-        </p>
-        <div className="no-offers">Sin datos de mercado disponibles</div>
+        <h2 className="offers-panel__title">{t('detail.offersEmptyTitle')}</h2>
+        <p className="offers-panel__subtitle">{t('detail.offersEmptySubtitle')}</p>
+        <div className="no-offers">{t('detail.noOffers')}</div>
       </div>
     );
   }
 
   return (
     <div className="offers-panel">
-      <h2 className="offers-panel__title">Top 5 más baratos</h2>
+      <h2 className="offers-panel__title">{t('detail.offersTitle')}</h2>
       <p className="offers-panel__subtitle">
-        Ordenados de menor a mayor precio en USD · {pricing.sources_count} fuentes consultadas
+        {t('detail.offersSubtitle', { count: pricing.sources_count })}
       </p>
       <ul className="offer-list">
         {offers.map((offer, index) => (
@@ -43,14 +45,14 @@ export function PriceOffers({ pricing }) {
               </div>
               {offer.note && <div className="offer-row__note">{offer.note}</div>}
             </div>
-            <span className="offer-row__price">{formatPrice(offer.price_usd)}</span>
+            <span className="offer-row__price">{formatPrice(offer.price_usd, locale)}</span>
             <a
               className="offer-row__cta"
               href={offer.url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Comprar
+              {t('detail.buy')}
             </a>
           </li>
         ))}

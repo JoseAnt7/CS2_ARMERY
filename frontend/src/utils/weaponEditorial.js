@@ -1,6 +1,8 @@
+import i18n from '../i18n';
+
 function formatPrice(usd) {
   if (usd == null) return null;
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(i18n.language === 'en' ? 'en-US' : 'es-ES', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
@@ -8,42 +10,60 @@ function formatPrice(usd) {
 }
 
 function describeExterior(exterior) {
-  const map = {
-    'Factory New': 'Factory New (recién fabricada, sin desgaste visible)',
-    'Minimal Wear': 'Minimal Wear (ligeramente desgastada)',
-    'Field-Tested': 'Field-Tested (desgaste moderado, la más común en juego)',
-    'Well-Worn': 'Well-Worn (desgaste notable)',
-    'Battle-Scarred': 'Battle-Scarred (muy desgastada, suele ser la opción más económica)',
-  };
-  return map[exterior] || exterior;
+  const key = `catalog:editorial.exteriors.${exterior}`;
+  const translated = i18n.t(key);
+  return translated !== key ? translated : exterior;
 }
 
 export function buildWeaponEditorialParagraphs(weapon, pricing) {
   const name = weapon.display_name;
   const category = weapon.category_label || 'objeto de CS2';
-  const rarity = weapon.rarity ? ` rareza ${weapon.rarity}` : '';
-  const stattrak = weapon.stattrak
-    ? ' Esta variante incluye contador StatTrak™, que registra eliminaciones confirmadas en partidas oficiales.'
-    : '';
+  const rarity = weapon.rarity ? i18n.t('catalog:editorial.rarityPrefix', { rarity: weapon.rarity }) : '';
+  const stattrak = weapon.stattrak ? i18n.t('catalog:editorial.stattrakNote') : '';
   const exterior = weapon.exterior
-    ? ` El exterior indicado es ${describeExterior(weapon.exterior)}.`
+    ? i18n.t('catalog:editorial.exteriorPrefix', { exterior: describeExterior(weapon.exterior) })
     : '';
-  const weaponType = weapon.weapon ? ` Pertenece al arma ${weapon.weapon}.` : '';
+  const weaponType = weapon.weapon
+    ? i18n.t('catalog:editorial.weaponPrefix', { weapon: weapon.weapon })
+    : '';
 
   const avg = formatPrice(pricing?.average_price_usd);
   const sources = pricing?.sources_count ?? 0;
   const cheapest = pricing?.top_cheapest?.[0];
+  const countSuffix = sources !== 1 ? 's' : '';
 
-  const priceParagraph = avg
-    ? sources > 0
-      ? `Según nuestra última consulta a ${sources} marketplace${sources !== 1 ? 's' : ''}, el precio medio orientativo de ${name} ronda ${avg}.${cheapest ? ` La oferta más económica detectada estaba en ${cheapest.marketplace_name} por ${formatPrice(cheapest.price_usd)}.` : ''} Recuerda que comisiones, impuestos y tipo de cambio pueden modificar el importe final.`
-      : `En este momento no disponemos de precios actualizados para ${name}. Puedes volver más tarde o consultar directamente Steam Community Market y otros mercados especializados.`
-    : `Todavía no hemos podido calcular un precio medio fiable para ${name}. Los mercados pueden tardar en indexar nuevos listados o limitar temporalmente las consultas.`;
+  let priceParagraph;
+  if (avg && sources > 0) {
+    const cheapestPart = cheapest
+      ? i18n.t('catalog:editorial.cheapest', {
+          market: cheapest.marketplace_name,
+          price: formatPrice(cheapest.price_usd),
+        })
+      : '';
+    priceParagraph = i18n.t('catalog:editorial.priceWithData', {
+      count: sources,
+      countSuffix,
+      name,
+      avg,
+      cheapest: cheapestPart,
+    });
+  } else if (avg) {
+    priceParagraph = i18n.t('catalog:editorial.priceNoData', { name });
+  } else {
+    priceParagraph = i18n.t('catalog:editorial.priceNoAvg', { name });
+  }
 
   return [
-    `${name} es un ${category.toLowerCase()} de Counter-Strike 2${rarity}.${weaponType}${exterior}${stattrak} En Global Skin Metrics reunimos ofertas públicas para que compares dónde resulta más conveniente comprar este ítem sin tener que revisar cada marketplace por separado.`,
+    i18n.t('catalog:editorial.intro', {
+      name,
+      category: category.toLowerCase(),
+      rarity,
+      weapon: weaponType,
+      exterior,
+      stattrak,
+    }),
     priceParagraph,
-    'Antes de comprar, comprueba la reputación del vendedor, las comisiones del mercado y que el listado coincida exactamente con el nombre y exterior que buscas. Global Skin Metrics no participa en la transacción: actuamos como herramienta informativa y te redirigimos al sitio donde se formaliza la compra.',
-    'Si eres coleccionista o trader, conviene seguir la evolución del precio durante varios días. Las skins de CS2 fluctúan con actualizaciones del juego, torneos profesionales y cambios en la oferta del mercado secundario.',
+    i18n.t('catalog:editorial.advice'),
+    i18n.t('catalog:editorial.trader'),
   ];
 }

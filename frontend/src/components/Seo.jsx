@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   SITE_SEO,
   buildCanonical,
   buildTitle,
   buildOrganizationJsonLd,
   buildWebsiteJsonLd,
-  getSeoForPath,
+  getSeoForLocalizedPath,
+  getLocaleMeta,
+  buildHreflangLinks,
 } from '../seo/siteSeo';
-import { buildHomeFaqJsonLd } from '../content/siteContent';
+import { buildHomeFaqJsonLd } from './HomeEditorial';
+import { pathForRoute, DEFAULT_LOCALE, matchLocalizedRoute } from '../i18n/routePaths';
 
 function upsertMeta(attr, key, content) {
   if (!content) return;
@@ -21,15 +25,24 @@ function upsertMeta(attr, key, content) {
   el.setAttribute('content', content);
 }
 
-function upsertLink(rel, href) {
+function upsertLink(rel, href, extra = {}) {
   if (!href) return;
-  let el = document.querySelector(`link[rel="${rel}"]`);
+  const selector =
+    rel === 'alternate' && extra.hreflang
+      ? `link[rel="alternate"][hreflang="${extra.hreflang}"]`
+      : `link[rel="${rel}"]`;
+  let el = document.querySelector(selector);
   if (!el) {
     el = document.createElement('link');
     el.setAttribute('rel', rel);
     document.head.appendChild(el);
   }
   el.setAttribute('href', href);
+  if (extra.hreflang) el.setAttribute('hreflang', extra.hreflang);
+}
+
+function removeAlternateLinks() {
+  document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
 }
 
 function upsertJsonLd(id, data) {
@@ -43,9 +56,6 @@ function upsertJsonLd(id, data) {
   el.textContent = JSON.stringify(data);
 }
 
-/**
- * Actualiza title, meta y canonical. Usar en páginas concretas o dejar que SeoRouteWatcher infiera la ruta.
- */
 export function Seo({
   title,
   description,
@@ -54,19 +64,21 @@ export function Seo({
   jsonLdExtra = null,
   imageUrl = null,
   imageAlt = null,
+  locale = DEFAULT_LOCALE,
 }) {
   const location = useLocation();
   const path = canonicalPath ?? location.pathname;
   const fullTitle = buildTitle(title);
-  const desc = description || SITE_SEO.defaultDescription;
+  const desc = description;
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';
   const canonical = buildCanonical(path);
   const ogImage = imageUrl || SITE_SEO.ogImage;
   const ogImageAlt = imageAlt || SITE_SEO.ogImageAlt;
+  const meta = getLocaleMeta(locale);
 
   useEffect(() => {
     document.title = fullTitle;
-    document.documentElement.lang = SITE_SEO.language;
+    document.documentElement.lang = meta.htmlLang;
 
     upsertMeta('name', 'description', desc);
     upsertMeta('name', 'robots', robots);
@@ -78,7 +90,7 @@ export function Seo({
     upsertMeta('property', 'og:title', fullTitle);
     upsertMeta('property', 'og:description', desc);
     upsertMeta('property', 'og:url', canonical);
-    upsertMeta('property', 'og:locale', SITE_SEO.locale);
+    upsertMeta('property', 'og:locale', meta.ogLocale);
     upsertMeta('property', 'og:image', ogImage);
     upsertMeta('property', 'og:image:width', String(SITE_SEO.ogImageWidth));
     upsertMeta('property', 'og:image:height', String(SITE_SEO.ogImageHeight));
@@ -91,7 +103,17 @@ export function Seo({
 
     upsertLink('canonical', canonical);
 
-    upsertJsonLd('jsonld-website', buildWebsiteJsonLd());
+    removeAlternateLinks();
+    buildHreflangLinks(path).forEach(({ hreflang, href }) => {
+      upsertLink('alternate', href, { hreflang });
+    });
+    const matched = matchLocalizedRoute(path);
+    const defaultPath = matched?.routeId
+      ? pathForRoute(DEFAULT_LOCALE, matched.routeId, matched.params || {})
+      : pathForRoute(DEFAULT_LOCALE, 'home');
+    upsertLink('alternate', buildCanonical(defaultPath), { hreflang: 'x-default' });
+
+    upsertJsonLd('jsonld-website', buildWebsiteJsonLd(locale));
     upsertJsonLd('jsonld-organization', buildOrganizationJsonLd());
     if (jsonLdExtra) {
       upsertJsonLd('jsonld-page', jsonLdExtra);
@@ -99,22 +121,24 @@ export function Seo({
       const extra = document.getElementById('jsonld-page');
       if (extra) extra.remove();
     }
-  }, [fullTitle, desc, robots, canonical, jsonLdExtra, ogImage, ogImageAlt]);
+  }, [fullTitle, desc, robots, canonical, jsonLdExtra, ogImage, ogImageAlt, meta, path, locale]);
 
   return null;
 }
 
-/** SEO por defecto según la ruta actual (App shell). */
 export function SeoRouteWatcher() {
   const { pathname } = useLocation();
+  const { t } = useTranslation('seo');
+  const { t: tHome } = useTranslation('home');
+  const matched = matchLocalizedRoute(pathname);
 
-  // Las fichas /arma/:id gestionan su propio SEO con datos del ítem.
-  if (pathname.startsWith('/arma/')) {
+  if (matched?.routeId === 'weapon') {
     return null;
   }
 
-  const config = getSeoForPath(pathname);
-  const jsonLdExtra = pathname === '/' ? buildHomeFaqJsonLd() : null;
+  const config = getSeoForLocalizedPath(pathname, t);
+  const jsonLdExtra =
+    matched?.routeId === 'home' ? buildHomeFaqJsonLd((key, opts) => tHome(key, opts)) : null;
 
   return (
     <Seo
@@ -123,6 +147,7 @@ export function SeoRouteWatcher() {
       canonicalPath={config.canonicalPath}
       noindex={config.noindex}
       jsonLdExtra={jsonLdExtra}
+      locale={config.locale}
     />
   );
 }

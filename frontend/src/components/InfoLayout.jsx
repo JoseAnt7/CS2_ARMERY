@@ -1,22 +1,27 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/info.css';
 
-const INFO_NAV = [
-  { to: '/como-funciona', label: 'Cómo funciona' },
-  { to: '/sobre-nosotros', label: 'Sobre nosotros' },
-  { to: '/guias', label: 'Guías' },
-  { to: '/contacto', label: 'Contacto' },
-  { to: '/', label: 'Catálogo' },
-];
-
 export function InfoLayout({ title, children }) {
+  const { to } = useLocale();
+  const { t } = useTranslation('common');
+
+  const links = [
+    { route: 'howItWorks', label: t('infoNav.howItWorks') },
+    { route: 'about', label: t('infoNav.about') },
+    { route: 'guides', label: t('infoNav.guides') },
+    { route: 'contact', label: t('infoNav.contact') },
+    { route: 'home', label: t('infoNav.catalog') },
+  ];
+
   return (
     <article className="info-page">
       <header className="info-page__header">
         <h1 className="info-page__title">{title}</h1>
-        <nav className="info-page__nav" aria-label="Navegación informativa">
-          {INFO_NAV.map((link) => (
-            <Link key={link.to} to={link.to}>
+        <nav className="info-page__nav" aria-label={t('infoNav.label')}>
+          {links.map((link) => (
+            <Link key={link.route} to={to(link.route)}>
               {link.label}
             </Link>
           ))}

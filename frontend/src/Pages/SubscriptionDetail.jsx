@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { fetchSubscriptionDetail, subscribeToPlan } from '../api/client';
 import { useLocale } from '../hooks/useLocale';
 import '../styles/subscriptions.css';
 import '../styles/catalog.css';
 
-function formatPrice(eur) {
-  return new Intl.NumberFormat('es-ES', {
+function formatPrice(eur, locale) {
+  return new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'es-ES', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 0,
@@ -15,7 +16,8 @@ function formatPrice(eur) {
 }
 
 export function SubscriptionDetail() {
-  const { to } = useLocale();
+  const { to, locale } = useLocale();
+  const { t } = useTranslation('subscriptions');
   const { slug } = useParams();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState(null);
@@ -52,7 +54,7 @@ export function SubscriptionDetail() {
       window.dispatchEvent(new Event('auth-changed'));
       setMessage({
         type: 'success',
-        text: `Plan ${plan.name} activado. Puedes verlo en tu perfil.`,
+        text: t('detail.activated', { plan: plan.name }),
       });
       setTimeout(() => navigate(to('profile'), { state: { section: 'subscriptions' } }), 1500);
     } catch (err) {
@@ -66,7 +68,7 @@ export function SubscriptionDetail() {
     return (
       <div className="loading-state">
         <div className="spinner" />
-        <p>Cargando…</p>
+        <p>{t('detail.loading')}</p>
       </div>
     );
   }
@@ -74,9 +76,9 @@ export function SubscriptionDetail() {
   if (error || !subscription) {
     return (
       <div className="error-state">
-        <p>{error || 'Suscripción no encontrada'}</p>
+        <p>{error || t('detail.notFound')}</p>
         <Link to={to('subscriptions')} className="back-link">
-          ← Volver a suscripciones
+          {t('detail.back')}
         </Link>
       </div>
     );
@@ -85,7 +87,7 @@ export function SubscriptionDetail() {
   return (
     <>
       <Link to={to('subscriptions')} className="back-link">
-        ← Volver a suscripciones
+        {t('detail.back')}
       </Link>
 
       {message.text && (
@@ -113,11 +115,9 @@ export function SubscriptionDetail() {
 
       {subscription.plans?.length > 0 && (
         <section className="sub-plans">
-          <h2 className="sub-plans__title">Elige tu plan</h2>
+          <h2 className="sub-plans__title">{t('detail.choosePlan')}</h2>
           <p className="sub-plans__subtitle">
-            {!isLoggedIn
-              ? 'Inicia sesión para activar un plan (sin pago por ahora)'
-              : 'Selecciona un plan para guardarlo en tu cuenta'}
+            {!isLoggedIn ? t('detail.loginHint') : t('detail.selectHint')}
           </p>
           <div className="sub-plans__row">
             {subscription.plans.map((plan) => (
@@ -126,12 +126,12 @@ export function SubscriptionDetail() {
                 className={`plan-card ${plan.is_featured ? 'plan-card--featured' : ''}`}
               >
                 {plan.is_featured && (
-                  <span className="plan-card__badge">Recomendado</span>
+                  <span className="plan-card__badge">{t('detail.recommended')}</span>
                 )}
                 <h3 className="plan-card__name">{plan.name}</h3>
                 <p className="plan-card__price">
-                  {formatPrice(plan.price_eur)}
-                  <span> /mes</span>
+                  {formatPrice(plan.price_eur, locale)}
+                  <span>{t('detail.perMonth')}</span>
                 </p>
                 <p className="plan-card__desc">{plan.description}</p>
                 <button
@@ -141,8 +141,8 @@ export function SubscriptionDetail() {
                   onClick={() => handleSelectPlan(plan)}
                 >
                   {subscribing === plan.slug
-                    ? 'Guardando…'
-                    : `Contratar ${plan.name}`}
+                    ? t('detail.subscribing')
+                    : t('detail.subscribe', { plan: plan.name })}
                 </button>
               </article>
             ))}

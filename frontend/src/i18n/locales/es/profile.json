@@ -1,0 +1,50 @@
+{
+  "sidebarTitle": "Mi cuenta",
+  "sections": {
+    "account": "Datos de la Cuenta",
+    "subscriptions": "Subscripciones",
+    "alerts": "Avisos Personalizados",
+    "delete": "Eliminar Cuenta"
+  },
+  "account": {
+    "title": "Datos de la Cuenta",
+    "desc": "Consulta y edita la información de tu perfil",
+    "memberSince": "Miembro desde",
+    "accountId": "ID de cuenta",
+    "passwordOptional": "Nueva contraseña (opcional)",
+    "passwordPlaceholder": "Dejar vacío para no cambiar",
+    "confirmPassword": "Confirmar contraseña",
+    "save": "Guardar cambios",
+    "saving": "Guardando…",
+    "updateSuccess": "Datos actualizados correctamente"
+  },
+  "alerts": {
+    "title": "Avisos Personalizados",
+    "desc": "Configura alertas de precio para tus skins favoritas",
+    "placeholder": "Aquí irán los avisos personalizados. Esta función está bloqueada de momento."
+  },
+  "delete": {
+    "title": "Eliminar Cuenta",
+    "desc": "Acción permanente e irreversible",
+    "warning": "Confirma que tus datos serán eliminados de nuestra base de datos y no podrán recuperarse. Si estás conforme, pulsa el botón de abajo.",
+    "confirm": "¿Estás seguro? Esta acción no se puede deshacer.",
+    "submit": "Eliminar mi cuenta",
+    "submitting": "Eliminando…"
+  },
+  "loading": "Cargando tu perfil…",
+  "loadError": "No se pudo cargar el perfil",
+  "sessionExpired": "Tu sesión ha expirado o no es válida. Inicia sesión de nuevo.",
+  "loginLink": "Iniciar sesión",
+  "subs": {
+    "title": "Subscripciones",
+    "desc": "Tus planes activos en Global Skin Metrics",
+    "loading": "Cargando…",
+    "empty": "Aún no tienes ninguna suscripción activa.",
+    "browsePlans": "Ver planes disponibles",
+    "planLabel": "Plan",
+    "perMonth": "/mes",
+    "activeSince": "Activo desde {{date}}",
+    "manage": "Gestionar",
+    "exploreMore": "Explorar más suscripciones →"
+  }
+}

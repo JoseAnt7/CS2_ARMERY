@@ -1,0 +1,24 @@
+{
+  "heroTitle": "Suscripciones <span>Global Skin Metrics</span>",
+  "heroSubtitle": "Herramientas premium para traders: alertas de precio, bots inteligentes y mucho más.",
+  "loading": "Cargando suscripciones…",
+  "loadError": "No se pudieron cargar las suscripciones: {{message}}",
+  "empty": "No hay suscripciones disponibles en este momento.",
+  "card": {
+    "badge": "Bot",
+    "cta": "Ver planes →"
+  },
+  "detail": {
+    "loading": "Cargando…",
+    "notFound": "Suscripción no encontrada",
+    "back": "← Volver a suscripciones",
+    "choosePlan": "Elige tu plan",
+    "loginHint": "Inicia sesión para activar un plan (sin pago por ahora)",
+    "selectHint": "Selecciona un plan para guardarlo en tu cuenta",
+    "recommended": "Recomendado",
+    "perMonth": "/mes",
+    "subscribing": "Guardando…",
+    "subscribe": "Contratar {{plan}}",
+    "activated": "Plan {{plan}} activado. Puedes verlo en tu perfil."
+  }
+}

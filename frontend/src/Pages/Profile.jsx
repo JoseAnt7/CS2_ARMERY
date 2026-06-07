@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { deleteAccount, fetchProfile, updateProfile } from '../api/client';
 import { ProfileSubscriptionsSection } from '../components/ProfileSubscriptionsSection';
 import { useLocale } from '../hooks/useLocale';
 import '../styles/profile.css';
 import '../styles/auth.css';
 
-const SECTIONS = [
-  { id: 'account', label: 'Datos de la Cuenta', icon: '👤' },
-  { id: 'subscriptions', label: 'Subscripciones', icon: '⭐' },
-  { id: 'alerts', label: 'Avisos Personalizados', icon: '🔔', locked: true },
-  { id: 'delete', label: 'Eliminar Cuenta', icon: '🗑️' },
-];
+const SECTION_IDS = ['account', 'subscriptions', 'alerts', 'delete'];
 
-function formatDate(iso) {
+function formatDate(iso, locale) {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('es-ES', {
+  return new Date(iso).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
 }
 
-function AccountSection({ user, onUpdated }) {
+function AccountSection({ user, onUpdated, locale }) {
+  const { t } = useTranslation(['profile', 'auth']);
   const [form, setForm] = useState({
     username: user.username,
     email: user.email,
@@ -37,12 +34,12 @@ function AccountSection({ user, onUpdated }) {
     setMessage({ type: '', text: '' });
 
     if (form.password && form.password !== form.confirmPassword) {
-      setMessage({ type: 'error', text: 'Las contraseñas no coinciden' });
+      setMessage({ type: 'error', text: t('auth:passwordMismatch') });
       return;
     }
 
     if (form.password && form.password.length < 6) {
-      setMessage({ type: 'error', text: 'La contraseña debe tener al menos 6 caracteres' });
+      setMessage({ type: 'error', text: t('auth:passwordMinLength') });
       return;
     }
 
@@ -59,7 +56,7 @@ function AccountSection({ user, onUpdated }) {
       window.dispatchEvent(new Event('auth-changed'));
       onUpdated(data.user);
       setForm((prev) => ({ ...prev, password: '', confirmPassword: '' }));
-      setMessage({ type: 'success', text: 'Datos actualizados correctamente' });
+      setMessage({ type: 'success', text: t('profile:account.updateSuccess') });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -69,25 +66,23 @@ function AccountSection({ user, onUpdated }) {
 
   return (
     <section>
-      <h2 className="profile-section__title">Datos de la Cuenta</h2>
-      <p className="profile-section__desc">
-        Consulta y edita la información de tu perfil
-      </p>
+      <h2 className="profile-section__title">{t('profile:account.title')}</h2>
+      <p className="profile-section__desc">{t('profile:account.desc')}</p>
 
       <div className="profile-readonly">
         <div className="profile-readonly__row">
-          <span className="profile-readonly__label">Miembro desde</span>
-          <span className="profile-readonly__value">{formatDate(user.created_at)}</span>
+          <span className="profile-readonly__label">{t('profile:account.memberSince')}</span>
+          <span className="profile-readonly__value">{formatDate(user.created_at, locale)}</span>
         </div>
         <div className="profile-readonly__row">
-          <span className="profile-readonly__label">ID de cuenta</span>
+          <span className="profile-readonly__label">{t('profile:account.accountId')}</span>
           <span className="profile-readonly__value">#{user.id}</span>
         </div>
       </div>
 
       <form className="profile-form auth-form" style={{ padding: 0 }} onSubmit={handleSubmit}>
         <div className="form-field">
-          <label htmlFor="profile-username">Usuario</label>
+          <label htmlFor="profile-username">{t('auth:username')}</label>
           <input
             id="profile-username"
             value={form.username}
@@ -96,7 +91,7 @@ function AccountSection({ user, onUpdated }) {
           />
         </div>
         <div className="form-field">
-          <label htmlFor="profile-email">Email</label>
+          <label htmlFor="profile-email">{t('auth:email')}</label>
           <input
             id="profile-email"
             type="email"
@@ -106,19 +101,19 @@ function AccountSection({ user, onUpdated }) {
           />
         </div>
         <div className="form-field">
-          <label htmlFor="profile-password">Nueva contraseña (opcional)</label>
+          <label htmlFor="profile-password">{t('profile:account.passwordOptional')}</label>
           <input
             id="profile-password"
             type="password"
             autoComplete="new-password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            placeholder="Dejar vacío para no cambiar"
+            placeholder={t('profile:account.passwordPlaceholder')}
           />
         </div>
         {form.password && (
           <div className="form-field">
-            <label htmlFor="profile-confirm">Confirmar contraseña</label>
+            <label htmlFor="profile-confirm">{t('profile:account.confirmPassword')}</label>
             <input
               id="profile-confirm"
               type="password"
@@ -129,7 +124,7 @@ function AccountSection({ user, onUpdated }) {
           </div>
         )}
         <button type="submit" className="auth-submit" disabled={loading}>
-          {loading ? 'Guardando…' : 'Guardar cambios'}
+          {loading ? t('profile:account.saving') : t('profile:account.save')}
         </button>
       </form>
 
@@ -155,14 +150,13 @@ function PlaceholderSection({ title, description, text, locked }) {
 
 function DeleteSection() {
   const navigate = useNavigate();
+  const { to } = useLocale();
+  const { t } = useTranslation('profile');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
   async function handleDelete() {
-    const confirmed = window.confirm(
-      '¿Estás seguro? Esta acción no se puede deshacer.'
-    );
-    if (!confirmed) return;
+    if (!window.confirm(t('delete.confirm'))) return;
 
     setLoading(true);
     setMessage({ type: '', text: '' });
@@ -172,7 +166,7 @@ function DeleteSection() {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
       window.dispatchEvent(new Event('auth-changed'));
-      navigate('/');
+      navigate(to('home'));
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
       setLoading(false);
@@ -181,21 +175,18 @@ function DeleteSection() {
 
   return (
     <section>
-      <h2 className="profile-section__title">Eliminar Cuenta</h2>
-      <p className="profile-section__desc">Acción permanente e irreversible</p>
+      <h2 className="profile-section__title">{t('delete.title')}</h2>
+      <p className="profile-section__desc">{t('delete.desc')}</p>
 
       <div className="profile-delete-box">
-        <p>
-          Confirma que tus datos serán eliminados de nuestra base de datos y no podrán
-          recuperarse. Si estás conforme, pulsa el botón de abajo.
-        </p>
+        <p>{t('delete.warning')}</p>
         <button
           type="button"
           className="profile-delete-btn"
           onClick={handleDelete}
           disabled={loading}
         >
-          {loading ? 'Eliminando…' : 'Eliminar mi cuenta'}
+          {loading ? t('delete.submitting') : t('delete.submit')}
         </button>
       </div>
 
@@ -207,11 +198,12 @@ function DeleteSection() {
 }
 
 export function Profile() {
-  const { to } = useLocale();
+  const { to, locale } = useLocale();
+  const { t } = useTranslation('profile');
   const token = localStorage.getItem('access_token');
   const location = useLocation();
   const [activeSection, setActiveSection] = useState(
-    location.state?.section || 'account'
+    location.state?.section || 'account',
   );
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -228,21 +220,17 @@ export function Profile() {
       })
       .catch((err) => {
         const authError = /Subject must be a string|Missing Authorization|Token|401|422/i.test(
-          err.message
+          err.message,
         );
         if (authError) {
           localStorage.removeItem('access_token');
           localStorage.removeItem('user');
           window.dispatchEvent(new Event('auth-changed'));
         }
-        setError(
-          authError
-            ? 'Tu sesión ha expirado o no es válida. Inicia sesión de nuevo.'
-            : err.message
-        );
+        setError(authError ? t('sessionExpired') : err.message);
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, t]);
 
   if (!token) {
     return <Navigate to={to('auth')} replace />;
@@ -252,7 +240,7 @@ export function Profile() {
     return (
       <div className="profile-loading">
         <div className="spinner" />
-        <p>Cargando tu perfil…</p>
+        <p>{t('loading')}</p>
       </div>
     );
   }
@@ -260,9 +248,9 @@ export function Profile() {
   if (error || !user) {
     return (
       <div className="profile-guard">
-        <p>{error || 'No se pudo cargar el perfil'}</p>
+        <p>{error || t('loadError')}</p>
         <Link to={to('auth')} className="profile-guard__link">
-          Iniciar sesión
+          {t('loginLink')}
         </Link>
       </div>
     );
@@ -271,15 +259,15 @@ export function Profile() {
   function renderSection() {
     switch (activeSection) {
       case 'account':
-        return <AccountSection user={user} onUpdated={setUser} />;
+        return <AccountSection user={user} onUpdated={setUser} locale={locale} />;
       case 'subscriptions':
         return <ProfileSubscriptionsSection />;
       case 'alerts':
         return (
           <PlaceholderSection
-            title="Avisos Personalizados"
-            description="Configura alertas de precio para tus skins favoritas"
-            text="Aquí irán los avisos personalizados. Esta función está bloqueada de momento."
+            title={t('alerts.title')}
+            description={t('alerts.desc')}
+            text={t('alerts.placeholder')}
             locked
           />
         );
@@ -290,24 +278,33 @@ export function Profile() {
     }
   }
 
+  const sectionMeta = {
+    account: { icon: '👤', locked: false },
+    subscriptions: { icon: '⭐', locked: false },
+    alerts: { icon: '🔔', locked: true },
+    delete: { icon: '🗑️', locked: false },
+  };
+
   return (
     <div className="profile-page">
       <aside className="profile-sidebar">
-        <h1 className="profile-sidebar__title">Mi cuenta</h1>
+        <h1 className="profile-sidebar__title">{t('sidebarTitle')}</h1>
         <ul className="profile-nav">
-          {SECTIONS.map((section) => (
-            <li key={section.id} className="profile-nav__item">
+          {SECTION_IDS.map((id) => (
+            <li key={id} className="profile-nav__item">
               <button
                 type="button"
                 className={`profile-nav__btn ${
-                  activeSection === section.id ? 'profile-nav__btn--active' : ''
-                } ${section.locked ? 'profile-nav__btn--locked' : ''}`}
-                onClick={() => setActiveSection(section.id)}
-                aria-current={activeSection === section.id ? 'page' : undefined}
+                  activeSection === id ? 'profile-nav__btn--active' : ''
+                } ${sectionMeta[id].locked ? 'profile-nav__btn--locked' : ''}`}
+                onClick={() => setActiveSection(id)}
+                aria-current={activeSection === id ? 'page' : undefined}
               >
-                <span className="profile-nav__icon" aria-hidden>{section.icon}</span>
-                {section.label}
-                {section.locked && <span className="profile-nav__lock">🔒</span>}
+                <span className="profile-nav__icon" aria-hidden>
+                  {sectionMeta[id].icon}
+                </span>
+                {t(`sections.${id}`)}
+                {sectionMeta[id].locked && <span className="profile-nav__lock">🔒</span>}
               </button>
             </li>
           ))}

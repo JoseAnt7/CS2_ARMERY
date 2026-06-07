@@ -1,0 +1,50 @@
+{
+  "sidebarTitle": "My account",
+  "sections": {
+    "account": "Account details",
+    "subscriptions": "Subscriptions",
+    "alerts": "Custom alerts",
+    "delete": "Delete account"
+  },
+  "account": {
+    "title": "Account details",
+    "desc": "View and edit your profile information",
+    "memberSince": "Member since",
+    "accountId": "Account ID",
+    "passwordOptional": "New password (optional)",
+    "passwordPlaceholder": "Leave blank to keep current password",
+    "confirmPassword": "Confirm password",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "updateSuccess": "Profile updated successfully"
+  },
+  "alerts": {
+    "title": "Custom alerts",
+    "desc": "Set price alerts for your favorite skins",
+    "placeholder": "Custom alerts will appear here. This feature is locked for now."
+  },
+  "delete": {
+    "title": "Delete account",
+    "desc": "Permanent and irreversible action",
+    "warning": "Confirm that your data will be deleted from our database and cannot be recovered. If you agree, click the button below.",
+    "confirm": "Are you sure? This action cannot be undone.",
+    "submit": "Delete my account",
+    "submitting": "Deleting…"
+  },
+  "loading": "Loading your profile…",
+  "loadError": "Could not load profile",
+  "sessionExpired": "Your session has expired or is invalid. Please sign in again.",
+  "loginLink": "Sign in",
+  "subs": {
+    "title": "Subscriptions",
+    "desc": "Your active plans on Global Skin Metrics",
+    "loading": "Loading…",
+    "empty": "You do not have any active subscriptions yet.",
+    "browsePlans": "Browse available plans",
+    "planLabel": "Plan",
+    "perMonth": "/mo",
+    "activeSince": "Active since {{date}}",
+    "manage": "Manage",
+    "exploreMore": "Explore more subscriptions →"
+  }
+}

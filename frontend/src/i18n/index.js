@@ -11,6 +11,10 @@ import esCatalog from './locales/es/catalog.json';
 import esSeo from './locales/es/seo.json';
 import esCookies from './locales/es/cookies.json';
 import esContact from './locales/es/contact.json';
+import esAuth from './locales/es/auth.json';
+import esProfile from './locales/es/profile.json';
+import esAdmin from './locales/es/admin.json';
+import esSubscriptions from './locales/es/subscriptions.json';
 
 import enCommon from './locales/en/common.json';
 import enHome from './locales/en/home.json';
@@ -19,6 +23,10 @@ import enCatalog from './locales/en/catalog.json';
 import enSeo from './locales/en/seo.json';
 import enCookies from './locales/en/cookies.json';
 import enContact from './locales/en/contact.json';
+import enAuth from './locales/en/auth.json';
+import enProfile from './locales/en/profile.json';
+import enAdmin from './locales/en/admin.json';
+import enSubscriptions from './locales/en/subscriptions.json';
 
 import { DEFAULT_LOCALE, resolveLocaleFromPathname } from './routePaths';
 
@@ -32,6 +40,10 @@ const resources = {
     cookies: esCookies,
     contact: esContact,
     guidesContent: esGuidesContent,
+    auth: esAuth,
+    profile: esProfile,
+    admin: esAdmin,
+    subscriptions: esSubscriptions,
   },
   en: {
     common: enCommon,
@@ -42,6 +54,10 @@ const resources = {
     cookies: enCookies,
     contact: enContact,
     guidesContent: enGuidesContent,
+    auth: enAuth,
+    profile: enProfile,
+    admin: enAdmin,
+    subscriptions: enSubscriptions,
   },
 };
 
@@ -56,7 +72,7 @@ i18n.use(initReactI18next).init({
   fallbackLng: DEFAULT_LOCALE,
   supportedLngs: ['es', 'en'],
   defaultNS: 'common',
-  ns: ['common', 'home', 'info', 'catalog', 'seo', 'cookies', 'contact', 'guidesContent'],
+  ns: ['common', 'home', 'info', 'catalog', 'seo', 'cookies', 'contact', 'guidesContent', 'auth', 'profile', 'admin', 'subscriptions'],
   interpolation: { escapeValue: false },
 });
 

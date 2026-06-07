@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/subscriptions.css';
 
 export function SubscriptionCard({ subscription }) {
+  const { to } = useLocale();
+  const { t } = useTranslation('subscriptions');
+
   return (
-    <Link to={`/suscripciones/${subscription.slug}`} className="subscription-card">
+    <Link
+      to={to('subscriptionDetail', { slug: subscription.slug })}
+      className="subscription-card"
+    >
       <div className="subscription-card__image-wrap">
         {subscription.image_url && (
           <img
@@ -13,14 +21,14 @@ export function SubscriptionCard({ subscription }) {
             loading="lazy"
           />
         )}
-        <span className="subscription-card__badge">Bot</span>
+        <span className="subscription-card__badge">{t('card.badge')}</span>
       </div>
       <div className="subscription-card__body">
         <h3 className="subscription-card__name">{subscription.name}</h3>
         {subscription.tagline && (
           <p className="subscription-card__tagline">{subscription.tagline}</p>
         )}
-        <span className="subscription-card__cta">Ver planes →</span>
+        <span className="subscription-card__cta">{t('card.cta')}</span>
       </div>
     </Link>
   );

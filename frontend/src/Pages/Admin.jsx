@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   adminCreateUser,
   adminPatchSettings,
@@ -15,45 +16,15 @@ import { applyColorTheme, resolveColorTheme } from '../utils/applyColorTheme';
 import { useLocale } from '../hooks/useLocale';
 import '../styles/admin.css';
 
-const COLOR_THEME_OPTIONS = [
-  {
-    id: 'orange',
-    label: 'Naranja / dorado',
-    description: 'Tema actual. Cálido y energético, ideal para destacar ofertas.',
-    swatch: ['#f5a623', '#e67e22'],
-  },
-  {
-    id: 'blue',
-    label: 'Azul',
-    description: 'Alineado con el logo. Enfocado en datos y métricas.',
-    swatch: ['#4d9fff', '#2563eb'],
-  },
-];
-
-const PUBLIC_PAGES = [
-  {
-    id: 'subscriptions',
-    label: 'Suscripciones',
-    path: '/suscripciones',
-    settingKey: 'hide_subscriptions_public',
-  },
-];
+const THEME_IDS = ['orange', 'blue'];
 
 function getToken() {
   return localStorage.getItem('access_token');
 }
 
-function getStoredUser() {
-  try {
-    const raw = localStorage.getItem('user');
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
 export function Admin() {
   const { to } = useLocale();
+  const { t } = useTranslation(['admin', 'auth']);
   const { refresh: refreshSiteConfig } = useSiteConfig();
   const token = getToken();
   const [forbidden, setForbidden] = useState(false);
@@ -78,6 +49,18 @@ export function Admin() {
   const [subEdit, setSubEdit] = useState({});
   const savedThemeRef = useRef('orange');
   savedThemeRef.current = savedTheme;
+
+  const publicPages = useMemo(
+    () => [
+      {
+        id: 'subscriptions',
+        labelKey: 'visibility.pages.subscriptions',
+        path: to('subscriptions'),
+        settingKey: 'hide_subscriptions_public',
+      },
+    ],
+    [to],
+  );
 
   const sortedUsers = useMemo(
     () => [...users].sort((a, b) => a.id - b.id),
@@ -175,17 +158,17 @@ export function Admin() {
       const activeRow = sortedUsers.find((x) => x.id === userId);
       const activeSubs = (activeRow?.subscriptions || []).filter((s) => s.is_active);
 
-      let subscription_slug =
+      const subscription_slug =
         edit.subscription_slug ||
         activeSubs[0]?.subscription?.slug ||
         subsCatalog[0]?.slug;
 
       const plans = planOptionsForSub(subscription_slug);
-      let plan_slug =
+      const plan_slug =
         edit.plan_slug || activeSubs[0]?.plan?.slug || plans[0]?.slug;
 
       if (!subscription_slug || !plan_slug) {
-        setError('No hay suscripciones en el sistema o plan no válido.');
+        setError(t('admin:errors.noSubscription'));
         return;
       }
       setError('');
@@ -196,7 +179,7 @@ export function Admin() {
         setError(err.message);
       }
     },
-    [subEdit, sortedUsers, subsCatalog, planOptionsForSub, loadAll],
+    [subEdit, sortedUsers, subsCatalog, planOptionsForSub, loadAll, t],
   );
 
   const siteSettingsDirty =
@@ -228,7 +211,7 @@ export function Admin() {
       setSavedTheme(nextTheme);
       applyColorTheme(nextTheme);
       await refreshSiteConfig();
-      setSiteSettingsMsg('Cambios guardados');
+      setSiteSettingsMsg(t('admin:settingsSaved'));
     } catch (err) {
       setError(err.message);
       applyColorTheme(savedTheme);
@@ -245,7 +228,7 @@ export function Admin() {
   if (loading) {
     return (
       <div className="admin-page">
-        <p className="admin-hint">Cargando panel…</p>
+        <p className="admin-hint">{t('admin:loading')}</p>
       </div>
     );
   }
@@ -258,73 +241,77 @@ export function Admin() {
     <div className="admin-page">
       <header className="admin-page__header">
         <div>
-          <h1 className="admin-page__title">Administración</h1>
-          <p className="admin-page__subtitle">Estadísticas, usuarios y suscripciones</p>
+          <h1 className="admin-page__title">{t('admin:title')}</h1>
+          <p className="admin-page__subtitle">{t('admin:subtitle')}</p>
         </div>
       </header>
 
       {error && <p className="admin-error">{error}</p>}
 
       <section className="admin-section">
-        <h2 className="admin-section-title">Apariencia del sitio</h2>
-        <p className="admin-note">
-          Elige la paleta de acento (home, botones, enlaces activos, etc.). La vista previa se aplica al instante;
-          pulsa Guardar para que todos los visitantes la vean.
-        </p>
-        <div className="admin-theme-grid" role="radiogroup" aria-label="Tema de color">
-          {COLOR_THEME_OPTIONS.map((opt) => {
-            const selected = draftTheme === opt.id;
+        <h2 className="admin-section-title">{t('admin:appearance.title')}</h2>
+        <p className="admin-note">{t('admin:appearance.note')}</p>
+        <div className="admin-theme-grid" role="radiogroup" aria-label={t('admin:appearance.themeLabel')}>
+          {THEME_IDS.map((themeId) => {
+            const selected = draftTheme === themeId;
             return (
               <button
-                key={opt.id}
+                key={themeId}
                 type="button"
                 role="radio"
                 aria-checked={selected}
                 className={`admin-theme-card ${selected ? 'admin-theme-card--active' : ''}`}
-                onClick={() => selectDraftTheme(opt.id)}
+                onClick={() => selectDraftTheme(themeId)}
               >
                 <span className="admin-theme-card__swatches" aria-hidden>
-                  {opt.swatch.map((color) => (
-                    <span key={color} style={{ background: color }} />
-                  ))}
+                  {(themeId === 'orange' ? ['#f5a623', '#e67e22'] : ['#4d9fff', '#2563eb']).map(
+                    (color) => (
+                      <span key={color} style={{ background: color }} />
+                    ),
+                  )}
                 </span>
-                <span className="admin-theme-card__label">{opt.label}</span>
-                <span className="admin-theme-card__desc">{opt.description}</span>
-                {selected && <span className="admin-theme-card__badge">Seleccionado</span>}
+                <span className="admin-theme-card__label">{t(`admin:themes.${themeId}.label`)}</span>
+                <span className="admin-theme-card__desc">
+                  {t(`admin:themes.${themeId}.description`)}
+                </span>
+                {selected && (
+                  <span className="admin-theme-card__badge">{t('admin:appearance.selected')}</span>
+                )}
               </button>
             );
           })}
         </div>
         <p className="admin-theme-preview">
-          Vista previa:{' '}
-          <span className="admin-theme-preview__accent">skins CS2</span> en el título de la home.
+          <Trans
+            i18nKey="appearance.preview"
+            ns="admin"
+            components={{ accent: <span className="admin-theme-preview__accent" /> }}
+          />
         </p>
       </section>
 
       <section className="admin-section">
-        <h2 className="admin-section-title">Visibilidad de páginas</h2>
-        <p className="admin-note">
-          Controla qué secciones ve el público (visitantes y usuarios no admin). Los administradores siempre las ven.
-        </p>
+        <h2 className="admin-section-title">{t('admin:visibility.title')}</h2>
+        <p className="admin-note">{t('admin:visibility.note')}</p>
         <div className="admin-table-wrap">
           <table className="admin-table admin-visibility-table">
             <thead>
               <tr>
-                <th>Página</th>
-                <th>Ruta</th>
-                <th>Visible al público</th>
+                <th>{t('admin:visibility.colPage')}</th>
+                <th>{t('admin:visibility.colPath')}</th>
+                <th>{t('admin:visibility.colPublic')}</th>
               </tr>
             </thead>
             <tbody>
-              {PUBLIC_PAGES.map((page) => {
+              {publicPages.map((page) => {
                 const isPublicVisible = !draftHideSubs;
                 return (
                   <tr key={page.id}>
-                    <td data-label="Página">{page.label}</td>
-                    <td data-label="Ruta">
+                    <td data-label={t('admin:visibility.colPage')}>{t(`admin:${page.labelKey}`)}</td>
+                    <td data-label={t('admin:visibility.colPath')}>
                       <code>{page.path}</code>
                     </td>
-                    <td data-label="Visible al público">
+                    <td data-label={t('admin:visibility.colPublic')}>
                       <button
                         type="button"
                         className={`admin-visibility-toggle ${isPublicVisible ? 'admin-visibility-toggle--on' : 'admin-visibility-toggle--off'}`}
@@ -332,17 +319,23 @@ export function Admin() {
                           setSiteSettingsMsg('');
                           setDraftHideSubs((prev) => !prev);
                         }}
-                        title={isPublicVisible ? 'Visible para el público' : 'Oculta para el público'}
+                        title={
+                          isPublicVisible
+                            ? t('admin:visibility.publicTitle')
+                            : t('admin:visibility.hiddenTitle')
+                        }
                         aria-label={
                           isPublicVisible
-                            ? 'Ocultar al público'
-                            : 'Mostrar al público'
+                            ? t('admin:visibility.hidePublic')
+                            : t('admin:visibility.showPublic')
                         }
                       >
                         {isPublicVisible ? '👁' : '🚫'}
                       </button>
                       <span className="admin-visibility-status">
-                        {isPublicVisible ? 'Visible' : 'Oculta'}
+                        {isPublicVisible
+                          ? t('admin:visibility.visible')
+                          : t('admin:visibility.hidden')}
                       </span>
                     </td>
                   </tr>
@@ -358,7 +351,7 @@ export function Admin() {
             disabled={!siteSettingsDirty || savingSiteSettings}
             onClick={saveSiteSettings}
           >
-            {savingSiteSettings ? 'Guardando…' : 'Guardar cambios'}
+            {savingSiteSettings ? t('admin:visibility.saving') : t('admin:visibility.save')}
           </button>
           {siteSettingsMsg && (
             <span className="admin-visibility-msg">{siteSettingsMsg}</span>
@@ -368,30 +361,27 @@ export function Admin() {
 
       {stats && (
         <section className="admin-stats admin-section">
-          <h2 className="admin-section-title">Visitas (tracking)</h2>
-          <p className="admin-note">
-            Basado en eventos enviados desde el navegador (aprox. una por pestaña cada vez que entras).
-            Rangos por fecha UTC actual.
-          </p>
+          <h2 className="admin-section-title">{t('admin:stats.title')}</h2>
+          <p className="admin-note">{t('admin:stats.note')}</p>
           <div className="admin-stats__grid">
             <div className="admin-stat-card">
-              <span className="admin-stat-card__label">Hoy</span>
+              <span className="admin-stat-card__label">{t('admin:stats.today')}</span>
               <strong className="admin-stat-card__value">{stats.visits?.day ?? 0}</strong>
             </div>
             <div className="admin-stat-card">
-              <span className="admin-stat-card__label">Este mes</span>
+              <span className="admin-stat-card__label">{t('admin:stats.month')}</span>
               <strong className="admin-stat-card__value">{stats.visits?.month ?? 0}</strong>
             </div>
             <div className="admin-stat-card">
-              <span className="admin-stat-card__label">Este año</span>
+              <span className="admin-stat-card__label">{t('admin:stats.year')}</span>
               <strong className="admin-stat-card__value">{stats.visits?.year ?? 0}</strong>
             </div>
             <div className="admin-stat-card">
-              <span className="admin-stat-card__label">Usuarios registrados</span>
+              <span className="admin-stat-card__label">{t('admin:stats.users')}</span>
               <strong className="admin-stat-card__value">{stats.users_total ?? 0}</strong>
             </div>
             <div className="admin-stat-card">
-              <span className="admin-stat-card__label">Administradores</span>
+              <span className="admin-stat-card__label">{t('admin:stats.admins')}</span>
               <strong className="admin-stat-card__value">{stats.admins_total ?? 0}</strong>
             </div>
           </div>
@@ -399,10 +389,10 @@ export function Admin() {
       )}
 
       <section className="admin-section">
-        <h2 className="admin-section-title">Crear usuario</h2>
+        <h2 className="admin-section-title">{t('admin:createUser.title')}</h2>
         <form className="admin-form" onSubmit={handleCreateUser}>
           <label>
-            Usuario
+            {t('admin:createUser.username')}
             <input
               value={newUser.username}
               onChange={(e) => setNewUser((p) => ({ ...p, username: e.target.value }))}
@@ -410,7 +400,7 @@ export function Admin() {
             />
           </label>
           <label>
-            Email
+            {t('admin:createUser.email')}
             <input
               type="email"
               value={newUser.email}
@@ -419,7 +409,7 @@ export function Admin() {
             />
           </label>
           <label>
-            Contraseña
+            {t('admin:createUser.password')}
             <input
               type="password"
               value={newUser.password}
@@ -434,26 +424,26 @@ export function Admin() {
               checked={newUser.is_admin}
               onChange={(e) => setNewUser((p) => ({ ...p, is_admin: e.target.checked }))}
             />
-            Crear como administrador
+            {t('admin:createUser.asAdmin')}
           </label>
           <button type="submit" className="admin-btn">
-            Crear usuario
+            {t('admin:createUser.submit')}
           </button>
         </form>
       </section>
 
       <section className="admin-section">
-        <h2 className="admin-section-title">Usuarios</h2>
+        <h2 className="admin-section-title">{t('admin:users.title')}</h2>
         <div className="admin-table-wrap">
           <table className="admin-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Suscripciones</th>
-                <th>Acciones</th>
+                <th>{t('admin:users.colId')}</th>
+                <th>{t('admin:users.colUsername')}</th>
+                <th>{t('admin:users.colEmail')}</th>
+                <th>{t('admin:users.colRole')}</th>
+                <th>{t('admin:users.colSubs')}</th>
+                <th>{t('admin:users.colActions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -473,17 +463,23 @@ export function Admin() {
 
                 return (
                   <tr key={u.id}>
-                    <td data-label="ID">{u.id}</td>
-                    <td data-label="Usuario">{u.username}</td>
-                    <td data-label="Email">{u.email}</td>
-                    <td data-label="Rol">
+                    <td data-label={t('admin:users.colId')}>{u.id}</td>
+                    <td data-label={t('admin:users.colUsername')}>{u.username}</td>
+                    <td data-label={t('admin:users.colEmail')}>{u.email}</td>
+                    <td data-label={t('admin:users.colRole')}>
                       <span className={u.is_admin ? 'admin-badge admin-badge--gold' : 'admin-badge'}>
-                        {u.is_admin ? (u.admin_protected ? 'Admin principal' : 'Admin') : 'Usuario'}
+                        {u.is_admin
+                          ? u.admin_protected
+                            ? t('admin:users.roleMainAdmin')
+                            : t('admin:users.roleAdmin')
+                          : t('admin:users.roleUser')}
                       </span>
                     </td>
-                    <td data-label="Suscripciones">
+                    <td data-label={t('admin:users.colSubs')}>
                       <ul className="admin-sub-list">
-                        {activeSubs.length === 0 && <li className="muted">Ninguna activa</li>}
+                        {activeSubs.length === 0 && (
+                          <li className="muted">{t('admin:users.noActiveSub')}</li>
+                        )}
                         {activeSubs.map((s) => (
                           <li key={s.id}>
                             {s.subscription?.name} · {s.plan?.name}
@@ -535,18 +531,20 @@ export function Admin() {
                           className="admin-btn admin-btn--sm"
                           onClick={() => saveSubscription(u.id)}
                         >
-                          Guardar suscripción
+                          {t('admin:users.saveSub')}
                         </button>
                       </div>
                     </td>
-                    <td data-label="Acciones">
+                    <td data-label={t('admin:users.colActions')}>
                       {!(u.admin_protected && u.is_admin) && (
                         <button
                           type="button"
                           className="admin-btn admin-btn--outline"
                           onClick={() => toggleAdmin(u)}
                         >
-                          {u.is_admin ? 'Quitar admin' : 'Hacer admin'}
+                          {u.is_admin
+                            ? t('admin:users.removeAdmin')
+                            : t('admin:users.makeAdmin')}
                         </button>
                       )}
                     </td>
@@ -559,12 +557,17 @@ export function Admin() {
       </section>
 
       <section className="admin-section admin-bootstrap-hint">
-        <h2 className="admin-section-title">Primer administrador</h2>
+        <h2 className="admin-section-title">{t('admin:bootstrap.title')}</h2>
         <p>
-          Define <code>ADMIN_BOOTSTRAP_TOKEN</code> en el entorno del backend y ejecuta{' '}
-          <code>POST /api/admin/bootstrap</code> con el header{' '}
-          <code>X-Admin-Bootstrap-Token</code> para crear la primera cuenta admin (solo si aún no
-          existe ningún admin).
+          <Trans
+            i18nKey="bootstrap.text"
+            ns="admin"
+            components={{
+              code1: <code />,
+              code2: <code />,
+              code3: <code />,
+            }}
+          />
         </p>
       </section>
     </div>

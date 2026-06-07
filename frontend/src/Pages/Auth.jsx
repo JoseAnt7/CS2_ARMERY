@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { loginUser, registerUser } from '../api/client';
+import { useLocale } from '../hooks/useLocale';
 import '../styles/auth.css';
 
 export function Auth() {
   const navigate = useNavigate();
+  const { to } = useLocale();
+  const { t } = useTranslation('auth');
   const [tab, setTab] = useState('login');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -34,8 +38,8 @@ export function Auth() {
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
       window.dispatchEvent(new Event('auth-changed'));
-      setMessage({ type: 'success', text: 'Sesión iniciada correctamente' });
-      setTimeout(() => navigate('/'), 800);
+      setMessage({ type: 'success', text: t('loginSuccess') });
+      setTimeout(() => navigate(to('home')), 800);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -48,12 +52,12 @@ export function Auth() {
     clearMessage();
 
     if (registerForm.password !== registerForm.confirmPassword) {
-      setMessage({ type: 'error', text: 'Las contraseñas no coinciden' });
+      setMessage({ type: 'error', text: t('passwordMismatch') });
       return;
     }
 
     if (registerForm.password.length < 6) {
-      setMessage({ type: 'error', text: 'La contraseña debe tener al menos 6 caracteres' });
+      setMessage({ type: 'error', text: t('passwordMinLength') });
       return;
     }
 
@@ -65,10 +69,7 @@ export function Auth() {
         email: registerForm.email,
         password: registerForm.password,
       });
-      setMessage({
-        type: 'success',
-        text: 'Cuenta creada. Ya puedes iniciar sesión.',
-      });
+      setMessage({ type: 'success', text: t('registerSuccess') });
       setLoginForm({ identifier: registerForm.username, password: '' });
       setRegisterForm({ username: '', email: '', password: '', confirmPassword: '' });
       setTab('login');
@@ -82,38 +83,42 @@ export function Auth() {
   return (
     <div className="auth-page">
       <div className="auth-page__header">
-        <h1 className="auth-page__title">Tu cuenta</h1>
-        <p className="auth-page__subtitle">
-          Inicia sesión o crea una cuenta para guardar tus skins favoritas
-        </p>
+        <h1 className="auth-page__title">{t('title')}</h1>
+        <p className="auth-page__subtitle">{t('subtitle')}</p>
       </div>
 
       <div className="auth-card">
-        <div className="auth-tabs" role="tablist" aria-label="Tipo de formulario">
+        <div className="auth-tabs" role="tablist" aria-label={t('tabsLabel')}>
           <button
             type="button"
             role="tab"
             aria-selected={tab === 'login'}
             className={`auth-tab ${tab === 'login' ? 'auth-tab--active' : ''}`}
-            onClick={() => { setTab('login'); clearMessage(); }}
+            onClick={() => {
+              setTab('login');
+              clearMessage();
+            }}
           >
-            Iniciar sesión
+            {t('loginTab')}
           </button>
           <button
             type="button"
             role="tab"
             aria-selected={tab === 'register'}
             className={`auth-tab ${tab === 'register' ? 'auth-tab--active' : ''}`}
-            onClick={() => { setTab('register'); clearMessage(); }}
+            onClick={() => {
+              setTab('register');
+              clearMessage();
+            }}
           >
-            Registrarse
+            {t('registerTab')}
           </button>
         </div>
 
         {tab === 'login' ? (
           <form className="auth-form" onSubmit={handleLogin}>
             <div className="form-field">
-              <label htmlFor="login-identifier">Usuario o email</label>
+              <label htmlFor="login-identifier">{t('identifier')}</label>
               <input
                 id="login-identifier"
                 type="text"
@@ -124,7 +129,7 @@ export function Auth() {
               />
             </div>
             <div className="form-field">
-              <label htmlFor="login-password">Contraseña</label>
+              <label htmlFor="login-password">{t('password')}</label>
               <input
                 id="login-password"
                 type="password"
@@ -135,13 +140,13 @@ export function Auth() {
               />
             </div>
             <button type="submit" className="auth-submit" disabled={loading}>
-              {loading ? 'Entrando…' : 'Entrar'}
+              {loading ? t('loginSubmitting') : t('loginSubmit')}
             </button>
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleRegister}>
             <div className="form-field">
-              <label htmlFor="register-username">Usuario</label>
+              <label htmlFor="register-username">{t('username')}</label>
               <input
                 id="register-username"
                 type="text"
@@ -152,7 +157,7 @@ export function Auth() {
               />
             </div>
             <div className="form-field">
-              <label htmlFor="register-email">Email</label>
+              <label htmlFor="register-email">{t('email')}</label>
               <input
                 id="register-email"
                 type="email"
@@ -163,7 +168,7 @@ export function Auth() {
               />
             </div>
             <div className="form-field">
-              <label htmlFor="register-password">Contraseña</label>
+              <label htmlFor="register-password">{t('password')}</label>
               <input
                 id="register-password"
                 type="password"
@@ -175,19 +180,21 @@ export function Auth() {
               />
             </div>
             <div className="form-field">
-              <label htmlFor="register-confirm">Confirmar contraseña</label>
+              <label htmlFor="register-confirm">{t('confirmPassword')}</label>
               <input
                 id="register-confirm"
                 type="password"
                 autoComplete="new-password"
                 value={registerForm.confirmPassword}
-                onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
+                onChange={(e) =>
+                  setRegisterForm({ ...registerForm, confirmPassword: e.target.value })
+                }
                 required
                 minLength={6}
               />
             </div>
             <button type="submit" className="auth-submit" disabled={loading}>
-              {loading ? 'Creando cuenta…' : 'Crear cuenta'}
+              {loading ? t('registerSubmitting') : t('registerSubmit')}
             </button>
           </form>
         )}

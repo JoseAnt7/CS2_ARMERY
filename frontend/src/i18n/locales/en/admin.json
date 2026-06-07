@@ -1,0 +1,81 @@
+{
+  "title": "Administration",
+  "subtitle": "Statistics, users and subscriptions",
+  "loading": "Loading panel…",
+  "errors": {
+    "noSubscription": "No subscriptions in the system or invalid plan."
+  },
+  "settingsSaved": "Changes saved",
+  "appearance": {
+    "title": "Site appearance",
+    "note": "Choose the accent palette (home, buttons, active links, etc.). Preview applies instantly; click Save for all visitors to see it.",
+    "themeLabel": "Color theme",
+    "selected": "Selected",
+    "preview": "Preview: <accent>CS2 skins</accent> in the home title."
+  },
+  "themes": {
+    "orange": {
+      "label": "Orange / gold",
+      "description": "Current theme. Warm and energetic, great for highlighting deals."
+    },
+    "blue": {
+      "label": "Blue",
+      "description": "Aligned with the logo. Data and metrics focused."
+    }
+  },
+  "visibility": {
+    "title": "Page visibility",
+    "note": "Control which sections the public sees (visitors and non-admin users). Administrators always see them.",
+    "colPage": "Page",
+    "colPath": "Path",
+    "colPublic": "Public visibility",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "showPublic": "Show to public",
+    "hidePublic": "Hide from public",
+    "publicTitle": "Visible to the public",
+    "hiddenTitle": "Hidden from the public",
+    "pages": {
+      "subscriptions": "Subscriptions"
+    },
+    "save": "Save changes",
+    "saving": "Saving…"
+  },
+  "stats": {
+    "title": "Visits (tracking)",
+    "note": "Based on events sent from the browser (approx. one per tab per visit). Ranges use current UTC date.",
+    "today": "Today",
+    "month": "This month",
+    "year": "This year",
+    "users": "Registered users",
+    "admins": "Administrators"
+  },
+  "createUser": {
+    "title": "Create user",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "asAdmin": "Create as administrator",
+    "submit": "Create user"
+  },
+  "users": {
+    "title": "Users",
+    "colId": "ID",
+    "colUsername": "Username",
+    "colEmail": "Email",
+    "colRole": "Role",
+    "colSubs": "Subscriptions",
+    "colActions": "Actions",
+    "roleMainAdmin": "Primary admin",
+    "roleAdmin": "Admin",
+    "roleUser": "User",
+    "noActiveSub": "None active",
+    "saveSub": "Save subscription",
+    "makeAdmin": "Make admin",
+    "removeAdmin": "Remove admin"
+  },
+  "bootstrap": {
+    "title": "First administrator",
+    "text": "Set <code1>ADMIN_BOOTSTRAP_TOKEN</code1> in the backend environment and call <code2>POST /api/admin/bootstrap</code2> with the <code3>X-Admin-Bootstrap-Token</code3> header to create the first admin account (only if no admin exists yet)."
+  }
+}

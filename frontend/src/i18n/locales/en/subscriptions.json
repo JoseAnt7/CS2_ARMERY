@@ -1,0 +1,24 @@
+{
+  "heroTitle": "Subscriptions <span>Global Skin Metrics</span>",
+  "heroSubtitle": "Premium tools for traders: price alerts, smart bots and more.",
+  "loading": "Loading subscriptions…",
+  "loadError": "Could not load subscriptions: {{message}}",
+  "empty": "No subscriptions available right now.",
+  "card": {
+    "badge": "Bot",
+    "cta": "See plans →"
+  },
+  "detail": {
+    "loading": "Loading…",
+    "notFound": "Subscription not found",
+    "back": "← Back to subscriptions",
+    "choosePlan": "Choose your plan",
+    "loginHint": "Sign in to activate a plan (no payment for now)",
+    "selectHint": "Select a plan to save it to your account",
+    "recommended": "Recommended",
+    "perMonth": "/mo",
+    "subscribing": "Saving…",
+    "subscribe": "Get {{plan}}",
+    "activated": "Plan {{plan}} activated. You can see it in your profile."
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Administración",
+  "subtitle": "Estadísticas, usuarios y suscripciones",
+  "loading": "Cargando panel…",
+  "errors": {
+    "noSubscription": "No hay suscripciones en el sistema o plan no válido."
+  },
+  "settingsSaved": "Cambios guardados",
+  "appearance": {
+    "title": "Apariencia del sitio",
+    "note": "Elige la paleta de acento (home, botones, enlaces activos, etc.). La vista previa se aplica al instante; pulsa Guardar para que todos los visitantes la vean.",
+    "themeLabel": "Tema de color",
+    "selected": "Seleccionado",
+    "preview": "Vista previa: <accent>skins CS2</accent> en el título de la home."
+  },
+  "themes": {
+    "orange": {
+      "label": "Naranja / dorado",
+      "description": "Tema actual. Cálido y energético, ideal para destacar ofertas."
+    },
+    "blue": {
+      "label": "Azul",
+      "description": "Alineado con el logo. Enfocado en datos y métricas."
+    }
+  },
+  "visibility": {
+    "title": "Visibilidad de páginas",
+    "note": "Controla qué secciones ve el público (visitantes y usuarios no admin). Los administradores siempre las ven.",
+    "colPage": "Página",
+    "colPath": "Ruta",
+    "colPublic": "Visible al público",
+    "visible": "Visible",
+    "hidden": "Oculta",
+    "showPublic": "Mostrar al público",
+    "hidePublic": "Ocultar al público",
+    "publicTitle": "Visible para el público",
+    "hiddenTitle": "Oculta para el público",
+    "pages": {
+      "subscriptions": "Suscripciones"
+    },
+    "save": "Guardar cambios",
+    "saving": "Guardando…"
+  },
+  "stats": {
+    "title": "Visitas (tracking)",
+    "note": "Basado en eventos enviados desde el navegador (aprox. una por pestaña cada vez que entras). Rangos por fecha UTC actual.",
+    "today": "Hoy",
+    "month": "Este mes",
+    "year": "Este año",
+    "users": "Usuarios registrados",
+    "admins": "Administradores"
+  },
+  "createUser": {
+    "title": "Crear usuario",
+    "username": "Usuario",
+    "email": "Email",
+    "password": "Contraseña",
+    "asAdmin": "Crear como administrador",
+    "submit": "Crear usuario"
+  },
+  "users": {
+    "title": "Usuarios",
+    "colId": "ID",
+    "colUsername": "Usuario",
+    "colEmail": "Email",
+    "colRole": "Rol",
+    "colSubs": "Suscripciones",
+    "colActions": "Acciones",
+    "roleMainAdmin": "Admin principal",
+    "roleAdmin": "Admin",
+    "roleUser": "Usuario",
+    "noActiveSub": "Ninguna activa",
+    "saveSub": "Guardar suscripción",
+    "makeAdmin": "Hacer admin",
+    "removeAdmin": "Quitar admin"
+  },
+  "bootstrap": {
+    "title": "Primer administrador",
+    "text": "Define <code1>ADMIN_BOOTSTRAP_TOKEN</code1> en el entorno del backend y ejecuta <code2>POST /api/admin/bootstrap</code2> con el header <code3>X-Admin-Bootstrap-Token</code3> para crear la primera cuenta admin (solo si aún no existe ningún admin)."
+  }
+}

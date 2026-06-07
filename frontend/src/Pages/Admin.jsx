@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import {
@@ -12,7 +12,11 @@ import {
   fetchSubscriptions,
 } from '../api/client';
 import { useSiteConfig } from '../context/SiteConfigContext';
-import { applyColorTheme, resolveColorTheme } from '../utils/applyColorTheme';
+import {
+  applyColorTheme,
+  getStoredColorTheme,
+  resolveColorTheme,
+} from '../utils/applyColorTheme';
 import { useLocale } from '../hooks/useLocale';
 import '../styles/admin.css';
 
@@ -25,7 +29,7 @@ function getToken() {
 export function Admin() {
   const { to } = useLocale();
   const { t } = useTranslation(['admin', 'auth']);
-  const { refresh: refreshSiteConfig } = useSiteConfig();
+  const { settings: publishedSiteSettings, refresh: refreshSiteConfig } = useSiteConfig();
   const token = getToken();
   const [forbidden, setForbidden] = useState(false);
   const [stats, setStats] = useState(null);
@@ -47,8 +51,6 @@ export function Admin() {
     is_admin: false,
   });
   const [subEdit, setSubEdit] = useState({});
-  const savedThemeRef = useRef('orange');
-  savedThemeRef.current = savedTheme;
 
   const publicPages = useMemo(
     () => [
@@ -108,8 +110,11 @@ export function Admin() {
   }, [token, loadAll]);
 
   useEffect(() => {
-    return () => applyColorTheme(savedThemeRef.current);
-  }, []);
+    const publishedTheme = publishedSiteSettings?.color_theme;
+    return () => {
+      applyColorTheme(publishedTheme ?? getStoredColorTheme());
+    };
+  }, [publishedSiteSettings?.color_theme]);
 
   const handleCreateUser = useCallback(
     async (e) => {

@@ -20,7 +20,8 @@ export function SiteConfigProvider({ children }) {
   }, [refresh]);
 
   useEffect(() => {
-    applyColorTheme(settings?.color_theme);
+    if (!settings?.color_theme) return;
+    applyColorTheme(settings.color_theme);
   }, [settings?.color_theme]);
 
   const value = useMemo(() => ({ settings, refresh }), [settings, refresh]);

@@ -1,17 +1,24 @@
-const ADSENSE_CLIENT = 'ca-pub-7858627003457160';
+import { canLoadAds } from './cookieConsent';
 
-let loadRequested = false;
+const ADSENSE_CLIENT = 'ca-pub-7858627003457160';
 
 export function getAdSenseClientId() {
   return ADSENSE_CLIENT;
 }
 
-/** Carga el script de AdSense una sola vez (requiere consentimiento previo). */
+function scriptAlreadyPresent() {
+  return Boolean(document.querySelector('script[data-gsm-adsense]'));
+}
+
+/** Inserta el script de AdSense solo si hay consentimiento de publicidad. */
 export function loadAdSenseScript() {
-  if (loadRequested || typeof document === 'undefined') return;
-  if (document.querySelector('script[data-gsm-adsense]')) {
-    loadRequested = true;
-    return;
+  if (typeof document === 'undefined') return false;
+  if (!canLoadAds()) return false;
+  if (scriptAlreadyPresent()) return true;
+
+  if (typeof window.__gsmLoadAdSense === 'function') {
+    window.__gsmLoadAdSense();
+    return true;
   }
 
   const script = document.createElement('script');
@@ -20,5 +27,16 @@ export function loadAdSenseScript() {
   script.crossOrigin = 'anonymous';
   script.setAttribute('data-gsm-adsense', '1');
   document.head.appendChild(script);
-  loadRequested = true;
+  return true;
+}
+
+/** Sincroniza Consent Mode y carga/retira el script según la elección del usuario. */
+export function syncAdSenseWithConsent() {
+  if (canLoadAds()) {
+    loadAdSenseScript();
+    return;
+  }
+  if (scriptAlreadyPresent()) {
+    document.querySelectorAll('script[data-gsm-adsense]').forEach((node) => node.remove());
+  }
 }

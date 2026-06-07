@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 import { applyGoogleConsentMode } from '../utils/cookieConsent';
-import { loadAdSenseScript } from '../utils/adsense';
+import { syncAdSenseWithConsent } from '../utils/adsense';
 
 /**
- * Inicializa Consent Mode y carga el script de AdSense.
- * Con consentimiento denegado por defecto, Google puede mostrar anuncios no personalizados.
+ * Consent Mode v2 + AdSense: el script solo se carga si el usuario acepta publicidad.
+ * Verificación AdSense: meta tag + ads.txt + public/adsense-bootstrap.js (client id en HTML).
  */
 export function AdSenseLoader() {
   useEffect(() => {
-    applyGoogleConsentMode();
-    loadAdSenseScript();
-
-    function onConsentChange() {
+    function sync() {
       applyGoogleConsentMode();
+      syncAdSenseWithConsent();
     }
 
-    window.addEventListener('cookie-consent-changed', onConsentChange);
-    return () => window.removeEventListener('cookie-consent-changed', onConsentChange);
+    sync();
+    window.addEventListener('cookie-consent-changed', sync);
+    return () => window.removeEventListener('cookie-consent-changed', sync);
   }, []);
 
   return null;

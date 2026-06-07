@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchCategories, fetchWeaponFilters, fetchWeapons } from '../api/client';
 import { FilterBar } from '../components/FilterBar';
 import { WeaponCard } from '../components/WeaponCard';
@@ -9,10 +10,11 @@ import '../styles/info.css';
 const DEFAULT_CATEGORIES = [{ id: 'all', label: 'Todas' }];
 
 export function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [category, setCategory] = useState('all');
-  const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [search, setSearch] = useState(() => searchParams.get('q') || '');
+  const [debouncedSearch, setDebouncedSearch] = useState(() => searchParams.get('q') || '');
   const [exterior, setExterior] = useState('all');
   const [rarity, setRarity] = useState('all');
   const [exteriorOptions, setExteriorOptions] = useState([]);
@@ -37,9 +39,26 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 350);
+    const urlQ = searchParams.get('q') || '';
+    setSearch((prev) => (prev === urlQ ? prev : urlQ));
+  }, [searchParams]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      const trimmed = search.trim();
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (trimmed) next.set('q', trimmed);
+          else next.delete('q');
+          return next;
+        },
+        { replace: true },
+      );
+    }, 350);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, setSearchParams]);
 
   useEffect(() => {
     setPage(1);

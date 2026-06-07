@@ -4,6 +4,7 @@ import { fetchWeaponDetail } from '../api/client';
 import { PriceOffers } from '../components/PriceOffers';
 import { Seo } from '../components/Seo';
 import { buildWeaponEditorialParagraphs } from '../utils/weaponEditorial';
+import { buildProductJsonLd, slugToDisplayTitle } from '../seo/siteSeo';
 import '../styles/detail.css';
 import '../styles/info.css';
 
@@ -16,17 +17,14 @@ function formatPrice(usd) {
   }).format(usd);
 }
 
-function slugToLabel(slug) {
-  return slug
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 export function WeaponDetail() {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const fallbackName = slugToDisplayTitle(id);
+  const fallbackDescription = `Consulta el precio y las mejores ofertas de ${fallbackName} en CS2 (Steam, Skinport, DMarket y más).`;
 
   useEffect(() => {
     setLoading(true);
@@ -37,14 +35,12 @@ export function WeaponDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const fallbackTitle = slugToLabel(id || 'Skin CS2');
-
   if (loading) {
     return (
       <>
         <Seo
-          title={`${fallbackTitle} — precio CS2`}
-          description={`Consulta el precio y las mejores ofertas de ${fallbackTitle} en Steam, Skinport, DMarket y más mercados de Counter-Strike 2.`}
+          title={`${fallbackName} — precio CS2`}
+          description={fallbackDescription}
           canonicalPath={`/arma/${id}`}
         />
         <div className="detail-loading">
@@ -59,9 +55,10 @@ export function WeaponDetail() {
     return (
       <>
         <Seo
-          title={`${fallbackTitle} — precio CS2`}
-          description="Ficha de skin u objeto de CS2 en Global Skin Metrics."
+          title={`${fallbackName} — precio CS2`}
+          description={fallbackDescription}
           canonicalPath={`/arma/${id}`}
+          noindex
         />
         <div className="error-state">
           <p>{error || 'Objeto no encontrado en el catálogo.'}</p>
@@ -80,15 +77,7 @@ export function WeaponDetail() {
       ? ` Precio medio aproximado: ${formatPrice(pricing.average_price_usd)}.`
       : '';
   const seoDescription = `Compara precios de ${weapon.display_name} en CS2: ofertas en Steam, Skinport, DMarket y más mercados.${priceHint}`;
-
-  const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: weapon.display_name,
-    description: seoDescription,
-    image: weapon.image || undefined,
-    category: weapon.category_label,
-  };
+  const productJsonLd = buildProductJsonLd(weapon, pricing, seoDescription);
 
   return (
     <>
@@ -97,6 +86,8 @@ export function WeaponDetail() {
         description={seoDescription}
         canonicalPath={`/arma/${id}`}
         jsonLdExtra={productJsonLd}
+        imageUrl={weapon.image || undefined}
+        imageAlt={`${weapon.display_name} — precio CS2`}
       />
 
       <nav className="detail-breadcrumb" aria-label="Ruta de navegación">

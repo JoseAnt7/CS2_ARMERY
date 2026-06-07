@@ -43,7 +43,30 @@ CSBOT_PLANS = [
 ]
 
 
-def seed_subscriptions():
+WHALEWATCH_IMAGE = (
+    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3'
+    '?auto=format&fit=crop&w=800&q=80'
+)
+
+WHALEWATCH_DESCRIPTION = """WhaleWatch vigila automáticamente todo el mercado de skins CS2 en segundo plano. No tienes que elegir qué buscar: el radar recorre el catálogo completo y te avisa cuando detecta señales de manipulación:
+
+1. Acumulación — compras repetidas de ballenas (precio y volumen al alza).
+2. Dump masivo — venta coordinada o salida masiva.
+3. Pump & dump — subida artificial seguida de caída desde el pico.
+
+Las alertas son heurísticas basadas en datos públicos de Steam; úsalas como radar, no como consejo de inversión."""
+
+WHALEWATCH_PLAN = {
+    'slug': 'radar',
+    'name': 'Radar',
+    'description': 'Vigilancia automática de todas las skins y artículos del juego',
+    'price_eur': 29.00,
+    'sort_order': 1,
+    'is_featured': True,
+}
+
+
+def _seed_csbot():
     from extensions import db
     from models import Subscription, SubscriptionPlan
 
@@ -64,4 +87,42 @@ def seed_subscriptions():
     for plan_data in CSBOT_PLANS:
         db.session.add(SubscriptionPlan(subscription_id=csbot.id, **plan_data))
 
+
+def _seed_whalewatch():
+    from extensions import db
+    from models import Subscription, SubscriptionPlan, UserSubscription
+
+    existing = Subscription.query.filter_by(slug='whalewatch').first()
+    if existing:
+        existing.tagline = 'Radar automático de todo el mercado CS2'
+        existing.description = WHALEWATCH_DESCRIPTION
+        plans = SubscriptionPlan.query.filter_by(subscription_id=existing.id).all()
+        radar = next((p for p in plans if p.slug == 'radar'), None)
+        if not radar:
+            db.session.add(SubscriptionPlan(subscription_id=existing.id, **WHALEWATCH_PLAN))
+        for plan in plans:
+            if plan.slug != 'radar':
+                in_use = UserSubscription.query.filter_by(plan_id=plan.id).count()
+                if in_use == 0:
+                    db.session.delete(plan)
+        return
+
+    whalewatch = Subscription(
+        slug='whalewatch',
+        name='WhaleWatch',
+        tagline='Radar automático de todo el mercado CS2',
+        description=WHALEWATCH_DESCRIPTION,
+        image_url=WHALEWATCH_IMAGE,
+        is_active=True,
+    )
+    db.session.add(whalewatch)
+    db.session.flush()
+    db.session.add(SubscriptionPlan(subscription_id=whalewatch.id, **WHALEWATCH_PLAN))
+
+
+def seed_subscriptions():
+    from extensions import db
+
+    _seed_csbot()
+    _seed_whalewatch()
     db.session.commit()

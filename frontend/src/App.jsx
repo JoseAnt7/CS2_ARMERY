@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { CSBotWidget } from './components/CSBotWidget';
+import { WhaleWatchWidget } from './components/WhaleWatchWidget';
 import { CSBotProvider } from './context/CSBotContext';
+import { WhaleWatchProvider } from './context/WhaleWatchContext';
 import { SiteConfigProvider } from './context/SiteConfigContext';
 import { useSiteConfig } from './context/SiteConfigContext';
 import { Home } from './Pages/Home';
@@ -59,6 +61,7 @@ function App() {
       <SeoRouteWatcher />
       <AdSenseLoader />
       <VisitTracker />
+      <WhaleWatchProvider>
       <CSBotProvider>
         <SiteConfigProvider>
           <div className="app-shell">
@@ -102,9 +105,11 @@ function App() {
             <Footer />
             <CookieConsent />
             <CSBotWidget />
+            <WhaleWatchWidget />
           </div>
         </SiteConfigProvider>
       </CSBotProvider>
+      </WhaleWatchProvider>
     </BrowserRouter>
   );
 }
